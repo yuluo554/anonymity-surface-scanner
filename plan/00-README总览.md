@@ -4,8 +4,8 @@
 
 - **项目**：匿名性攻击面搜索器（Anonymity Surface Scanner）——纯本地 Python CLI
 - **性质**：不参赛项目题 · 发布 GitHub **公开仓库** · 署名 `yuluo554`
-- **版本**：v1（2026-10-20 定稿；需求侧、竞品与开源检索基准日 **2026-10-20**）；当前提交 = M5 收尾（可复算 gate 落地）
-- **当前状态**：**M5 完成**（`gate` 读闭合判据文件 → 调 M2（可选 M3）→ 产出 `gate.json` + `gate.md` + 真实退出码；`pass` / `violation` / `undecidable` 三态各有用例；Adult 端到端已实跑回填）。M0–M1 已交付骨架与独立真值夹具，M2 已交付等价类引擎，M3 已交付组合搜索，M4 已交付逐记录风险；仅计算实现 M1（`schema`）仍未落地，该子命令一律 `MODULE_NOT_READY` + 退出码 `2`（fail-closed，不伪造结果）。
+- **版本**：v1（2026-10-20 定稿；需求侧、竞品与开源检索基准日 **2026-10-20**）；当前提交 = M6 收尾（v0.1.0 已发布）
+- **当前状态**：**M6 完成 · v0.1.0 已发布**（公开仓 + annotated tag + GitHub Release 附 sdist；CI ubuntu/windows × 3.8/3.12 首推全绿）。`gate` 读闭合判据文件 → 调 M2（可选 M3）→ 产出 `gate.json` + `gate.md` + 真实退出码；`pass` / `violation` / `undecidable` 三态各有用例；Adult 端到端已实跑回填。M0–M1 已交付骨架与独立真值夹具，M2 已交付等价类引擎，M3 已交付组合搜索，M4 已交付逐记录风险；仅计算实现 M1（`schema`）仍未落地，该子命令一律 `MODULE_NOT_READY` + 退出码 `2`（fail-closed，不伪造结果）。
 - **一句话定位**：k/l/t 公式是商品，**没人回答"哪几列组合会让 k 崩塌"**——本工具输入一张表 + 列角色声明，输出最小 k、**最小崩塌集**、每处违例的等价类与行号清单（可手算复核）、以及可挂 CI 的 gate 结论。搜索层是护城河，不是公式层。
 - **交付形态**：**纯本地 Python CLI**（唯一形态，不设备选）。无 GPU、无云、无网络调用、无需真实敏感数据。
 - **撞域切割**：同系列既有题材分别在**制度与流程层**（产检查清单、评制度）与**文本条款层**（读文档、标风险条款）作业；本题是**数据层的可计算量**——输入数据行，产出数值、行号与列组合（方向级描述，具体领域按品牌隔离纪律不展开）。
@@ -29,7 +29,7 @@
 | `tools/adult_baseline.py` | UCI Adult 读入基线（只读本地、不联网；未取得时退出码 3） | ✅ M1 |
 | `examples/adult/` | UCI Adult 端到端演示（`run.sh` + `prepare.py` + 判据 + `EXPECTED.md` 实测摘要） | ✅ M5 |
 | `README.md`（仓库根） | 面向使用者的产品页（首屏含定位宣言与撞域切割） | ✅ M5（首屏 + 状态行 + 命令示例已实跑回填） |
-| `plan/RELEASE-M6.md` | 发布留档（tag 前入库；tag 后追加事实分栏） | ⬜ M6 |
+| `plan/RELEASE-M6.md` | 发布留档（tag 前栏 + tag 后实测栏 + 覆盖对账） | ✅ M6 |
 | `plan/HANDOFF-M1.md` | 第 1 棒启动包（七节；M0 收尾时写） | ✅ M0 |
 | `plan/HANDOFF-M2.md` | 第 2 棒启动包（七节；M1 收尾时写） | ✅ M1 |
 | `plan/HANDOFF-M3.md` | 第 3 棒启动包（七节；M2 收尾时写） | ✅ M2 |
@@ -42,7 +42,7 @@
 | `tools/check_sprint_layout.py` | 布局门（8 条判据） | ✅ M0 |
 | `tools/verify_layout_gate.py` | 布局门变异验证（10 组，逐组必须变红） | ✅ M0 |
 | `tools/scaffold_selftest.py` | 口径单点自检（版本 / 依赖 / 退出码 / 序列化） | ✅ M0 |
-| `.github/workflows/ci.yml` | CI：ubuntu/windows × 3.8/3.12 | ✅ M0（未推送，待首推验证） |
+| `.github/workflows/ci.yml` | CI：ubuntu/windows × 3.8/3.12 | ✅ M6（首推 4 矩阵全绿） |
 | `.gitattributes` | 源码 eol=lf 归一 + 二进制/快照冻结（sha256 被登记的对象字节不许被 git 改写） | ✅ M0 |
 
 > **交接单规则**：`plan/HANDOFF-M<k>.md` = **第 k 棒的启动包**，由第 k−1 棒收尾时写（七节：当前进度 / 当前事实·状态不变量 / 待办 / 既定口径 K 编号 / 环境坑 / DoD 逐项 / 命令速查）。
@@ -100,7 +100,7 @@
 | P7 | "CLI + 门禁"形态有人认，但"猜列名"不成立 | piiscope 2★、2026-10-11、`_QI_NAME_HINTS` 硬编码、PyPI 月下载 58 | ✅ 实测 |
 | P8 | 本工具能跑出可手算复核的违例清单 | M2：`scan.json` 的违例三件套在 tiny 上逐条可手算（`tests/test_m2_classes.py`）；人读报告在 `gate.md`（`tests/test_m5_gate.py`） | ✅ M2（JSON）/ ✅ M5（人读） |
 | P9 | 最小崩塌集在植入真值夹具上逐项命中 | M3：四组夹具的 `search` / `minimal_collapse_sets` 与独立 oracle 真值逐项一致（`tests/test_m3_search.py`）；三种场景（默认 / 空集 / 无解）逐组断言 | ✅ M3 |
-| P10 | 发布形态（公开仓 + tag + Release + 留档） | 未发布 | ⬜ M6 |
+| P10 | 发布形态（公开仓 + tag + Release + 留档） | 公开仓 `yuluo554/anonymity-surface-scanner`；`v0.1.0`（指向 `eeda0cd`）+ Release 附 sdist（sha256 `e5f3dbc0…47b`）；回下载 `sha256sum -c` OK；CI 4 矩阵首推全绿 | ✅ M6 |
 | P11 | Reddit 侧需求原话 | 直连超时、pullpush 限流 | ❌ 未取得（不作论据） |
 
 ## 四、里程碑
@@ -113,7 +113,7 @@
 | **M3** | 组合搜索（M3 模块）：反单调剪枝、最小崩塌集、崩塌曲线、三态完整性 | 真值夹具逐项命中；预算截断不冒充穷尽；剪枝条件被测试锁定 | ✅ 2026-10-20 |
 | **M4** | 逐记录风险与三种攻击者口径 | 三口径文档化并被测试引用；唯一记录行号与真值一致 | ✅ 2026-10-20 |
 | **M5** | gate + 判据文件：JSON 结果 + 人类可读报告 + 退出码 | 改阈值只改判据；退出码 `0/1/2` 正确；可直接挂 CI | ✅ 2026-10-20 |
-| **M6** | 发布 | **DoD = git tag + GitHub Release（附产物）+ 发布留档三件套**；公开仓可 `pip install` 后一条命令跑通；`plan/RELEASE-M6.md` 落库 | ⬜ |
+| **M6** | 发布 | **DoD = git tag + GitHub Release（附产物）+ 发布留档三件套**；公开仓可 `pip install` 后一条命令跑通；`plan/RELEASE-M6.md` 落库 | ✅ 2026-10-20 |
 
 > **里程碑纪律**：M1 必须先于代码——没有植入真值的夹具，M2/M3 的"命中"无从判定。M6 之前不改写 `plan/01`。
 
@@ -125,4 +125,4 @@
 | 三处关键词污染 | `privacy metrics` / `privacy budget accounting` / `privacy gate` 的头部仓库与本域无关 | 不作空白或竞品证据（`data/README.md` §一） |
 | 搜索完整性 | 剪枝依赖"固定行集 + 只分组"的单调性；引入泛化/抑制即失效 | CLI、JSON、README 三处显式声明三态（D3） |
 | Reddit 侧需求 | 直连超时、pullpush 限流，未取得原话 | ❌ 不作论据 |
-| Adult 演示的具体数值 | 未实跑 | 以实跑回填，本文档与 `plan/01` 均不预写 k 值 |
+| Adult 演示的具体数值 | ~~未实跑~~ M5 已实跑回填（2026-10-20）；M6 在干净树内复跑，`gate.json` / `gate.md` 与仓库留档逐字节相同 | 以实跑回填，本文档与 `plan/01` 均不预写 k 值 |

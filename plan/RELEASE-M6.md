@@ -65,34 +65,54 @@
 
 | 项 | 实测 |
 | --- | --- |
-| tag | 待 tag 后填写（annotated，`v0.1.0`） |
-| tag 指向提交 | 待 tag 后填写 |
-| tagger | 待 tag 后填写（noreply 邮箱） |
+| tag | `v0.1.0`（annotated，对象 `3349e6aa…bb67`） |
+| tag 指向提交 | `eeda0cd9373387308ae97f7c3daa71dc8e673e0e`（`M6：发布留档（tag 前栏）`） |
+| tagger | `yuluo554 <282769740+yuluo554@users.noreply.github.com>` |
+| 远端 | `https://github.com/yuluo554/anonymity-surface-scanner`（PUBLIC，默认分支 `main`） |
+| `main` 与 tag 的关系 | `main` 已快进到同一提交；`refs/heads/main` = `eeda0cd` |
+
+> 首推时 `main` 曾停在 M1（`200c1c5`）：`git archive` 前的分支切换因本机 `python` 为商店占位符未生效。
+> 已用 `git merge --ff-only` 快进（**非强推**）后重新推送，tag 未移动。
 
 ### 2. sdist 与 Release
 
 | 项 | 实测 |
 | --- | --- |
-| 构建方式 | 从 `git archive v0.1.0` 导出树内 `py -3.12 -m build` |
-| 附件 | 待构建后填写 |
-| sha256 | 待 tag 后填写（本节属于 tag 后栏，允许字面 digest） |
-| 回下载核对 | 待首推验证（`gh release download` → `sha256sum -c`） |
-| 解包自足 | 待 tag 后填写（解包目录之外跑 CLI） |
+| 构建方式 | 从 `git archive v0.1.0` 导出树内 `py -3.12 -m build --sdist` |
+| 附件 | `anonymity_scanner-0.1.0.tar.gz`（`155783` 字节） |
+| sha256 | `e5f3dbc0c238e79b6d68bdafea221551b78bc65b18fcd448cf5ec59cd307e47b` |
+| GitHub 侧 digest | `sha256:e5f3dbc0c238e79b6d68bdafea221551b78bc65b18fcd448cf5ec59cd307e47b`（一致） |
+| 回下载核对 | `gh release download v0.1.0` → `sha256sum -c` → **OK** |
+| 与 tag 构建件比对 | 解包后 `diff -r` 内容一致（归档时间戳差异不影响内容） |
+| 解包自足 | 解包 → venv → `pip install <tar.gz>` → `--version` = `0.1.0`；从解包目录**之外**跑 `scan` → 退出码 `1`、产出 `scan.json` |
+| 包内容 | `src/` `plan/` `data/README.md` `tools/` `tests/` + 元数据；**无** `*.csv` / `*.data` / `*.names` |
+| Release | <https://github.com/yuluo554/anonymity-surface-scanner/releases/tag/v0.1.0>（非 draft、非 prerelease） |
+
+> **sdist 不可逐字节重建**：setuptools 写入归档成员的 mtime，两次构建的 tar.gz 字节不同（解包内容一致）。
+> 因此本留档只承诺"回下载件 = 已发布件"（`sha256sum -c` + GitHub 侧 digest 双证），
+> 不承诺"任意时刻重建得到同一字节"。设 `SOURCE_DATE_EPOCH` 亦未消除该差异（实测）。
 
 ### 3. CI 首推对账
 
 | 项 | 实测 |
 | --- | --- |
-| 首次 push | 待首推验证 |
-| run 清单（ubuntu/windows × 3.8/3.12） | 待首推验证 |
-| 结论 | 待首推验证；红则如实登记修复，不改历史措辞 |
+| 首次 push | `main` → `eeda0cd`；tag `v0.1.0` → `eeda0cd`（两个 push 事件） |
+| run（`main`） | `39436441311` · success · <https://github.com/yuluo554/anonymity-surface-scanner/actions/runs/39436441311> |
+| run（tag） | `39436117872` · success · <https://github.com/yuluo554/anonymity-surface-scanner/actions/runs/39436117872> |
+| 矩阵 | 每个 run 4 个 job：`py3.8 · ubuntu-22.04` / `py3.8 · windows-latest` / `py3.12 · ubuntu-22.04` / `py3.12 · windows-latest`，**全部 success** |
+| 步骤 | 布局门 → 变异验证（10/10）→ selftest → `pytest` → `anonymity-scanner --version` |
+| 结论 | 首推即绿，无修复轮次；3.9–3.11 仍不作承诺 |
+
+> 另有一次 `200c1c5`（M1 时点的 `main`）触发的 run `39436118278` 亦为 success——那是快进前的旧 `main`，
+> 不代表发布提交；发布提交的对账以上表两个 run 为准。
 
 ### 4. tag 后作用域
 
 | 项 | 实测 |
 | --- | --- |
-| `POST_TAG_SCOPE` | 待 tag 后填写 |
-| `DELIVERABLE_UNCHANGED` | 待 tag 后填写（`src/ pyproject.toml MANIFEST.in` 零差异） |
+| `POST_TAG_SCOPE` | `plan/`（`00` `05` `06` `RELEASE-M6`）、`README.md` |
+| `DELIVERABLE_UNCHANGED` | `git diff --stat v0.1.0 -- src pyproject.toml MANIFEST.in` → **空**（零差异） |
+| 表格入库 | 复查 `git ls-files` 中 `*.csv` / `*.data` / `*.names` = 0 |
 
 ## 覆盖对账
 
