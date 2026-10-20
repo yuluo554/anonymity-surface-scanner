@@ -99,6 +99,7 @@
 | 首次 push | `main` → `eeda0cd`；tag `v0.1.0` → `eeda0cd`（两个 push 事件） |
 | run（`main`） | `39436441311` · success · <https://github.com/yuluo554/anonymity-surface-scanner/actions/runs/39436441311> |
 | run（tag） | `39436117872` · success · <https://github.com/yuluo554/anonymity-surface-scanner/actions/runs/39436117872> |
+| run（收尾提交 `8f4f895`） | `39437106544` · success · <https://github.com/yuluo554/anonymity-surface-scanner/actions/runs/39437106544> |
 | 矩阵 | 每个 run 4 个 job：`py3.8 · ubuntu-22.04` / `py3.8 · windows-latest` / `py3.12 · ubuntu-22.04` / `py3.12 · windows-latest`，**全部 success** |
 | 步骤 | 布局门 → 变异验证（10/10）→ selftest → `pytest` → `anonymity-scanner --version` |
 | 结论 | 首推即绿，无修复轮次；3.9–3.11 仍不作承诺 |
@@ -110,7 +111,7 @@
 
 | 项 | 实测 |
 | --- | --- |
-| `POST_TAG_SCOPE` | `plan/`（`00` `05` `06` `RELEASE-M6`）、`README.md` |
+| `POST_TAG_SCOPE` | `plan/`（`00` `05` `06` `RELEASE-M6`）、`README.md`（实测 `git diff --name-only v0.1.0..HEAD` 只含这 5 个文件） |
 | `DELIVERABLE_UNCHANGED` | `git diff --stat v0.1.0 -- src pyproject.toml MANIFEST.in` → **空**（零差异） |
 | 表格入库 | 复查 `git ls-files` 中 `*.csv` / `*.data` / `*.names` = 0 |
 
