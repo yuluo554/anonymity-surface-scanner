@@ -1,0 +1,2055 @@
+{
+  "by_policy": {
+    "drop": {
+      "class_count": 51,
+      "class_size_histogram": {
+        "1": 47,
+        "2": 3,
+        "3": 1
+      },
+      "k": 1,
+      "l": 1,
+      "missing_class": null,
+      "t": 0.678571,
+      "undecided_rows": [
+        5,
+        12,
+        31,
+        44
+      ],
+      "unique_records": [
+        10,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "violations": [
+        {
+          "count": 3,
+          "key": "age=20|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            1,
+            6,
+            11
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            21
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            16
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            26
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            36
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            41
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            46
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            51
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00004|dob=1990-06|sex=M",
+          "row_numbers": [
+            56
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=30|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            2,
+            7
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            17
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            22
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            27
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            37
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            32
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            42
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            47
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00004|dob=1990-05|sex=M",
+          "row_numbers": [
+            52
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00004|dob=1990-06|sex=F",
+          "row_numbers": [
+            57
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=40|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            3,
+            8
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            13
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            18
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            23
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            28
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            33
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            38
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            43
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00003|dob=1990-04|sex=M",
+          "row_numbers": [
+            48
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00004|dob=1990-05|sex=F",
+          "row_numbers": [
+            53
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00009|dob=1999-09|sex=M",
+          "row_numbers": [
+            58
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=50|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            4,
+            9
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            19
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            14
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            29
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            24
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            39
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            34
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            49
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00004|dob=1990-05|sex=M",
+          "row_numbers": [
+            54
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00009|dob=1999-08|sex=F",
+          "row_numbers": [
+            59
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            10
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            15
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            20
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            25
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            30
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            35
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            45
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            40
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-04|sex=M",
+          "row_numbers": [
+            50
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00004|dob=1990-06|sex=F",
+          "row_numbers": [
+            55
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00010|dob=1999-07|sex=M",
+          "row_numbers": [
+            60
+          ]
+        }
+      ]
+    },
+    "separate-class": {
+      "class_count": 52,
+      "class_size_histogram": {
+        "1": 47,
+        "2": 3,
+        "3": 1,
+        "4": 1
+      },
+      "k": 1,
+      "l": 1,
+      "missing_class": {
+        "k": 4,
+        "row_numbers": [
+          5,
+          12,
+          31,
+          44
+        ]
+      },
+      "t": 0.666667,
+      "undecided_rows": [],
+      "unique_records": [
+        10,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "violations": [
+        {
+          "count": 4,
+          "key": "__MISSING__",
+          "row_numbers": [
+            5,
+            12,
+            31,
+            44
+          ]
+        },
+        {
+          "count": 3,
+          "key": "age=20|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            1,
+            6,
+            11
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            21
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            16
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            26
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            36
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            41
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            46
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            51
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00004|dob=1990-06|sex=M",
+          "row_numbers": [
+            56
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=30|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            2,
+            7
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            17
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            22
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            27
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            37
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            32
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            42
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            47
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00004|dob=1990-05|sex=M",
+          "row_numbers": [
+            52
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00004|dob=1990-06|sex=F",
+          "row_numbers": [
+            57
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=40|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            3,
+            8
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            13
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            18
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            23
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            28
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            33
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            38
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            43
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00003|dob=1990-04|sex=M",
+          "row_numbers": [
+            48
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00004|dob=1990-05|sex=F",
+          "row_numbers": [
+            53
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00009|dob=1999-09|sex=M",
+          "row_numbers": [
+            58
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=50|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            4,
+            9
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            19
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            14
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            29
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            24
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            39
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            34
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            49
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00004|dob=1990-05|sex=M",
+          "row_numbers": [
+            54
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00009|dob=1999-08|sex=F",
+          "row_numbers": [
+            59
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            10
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            15
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            20
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            25
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            30
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            35
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            45
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            40
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-04|sex=M",
+          "row_numbers": [
+            50
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00004|dob=1990-06|sex=F",
+          "row_numbers": [
+            55
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00010|dob=1999-07|sex=M",
+          "row_numbers": [
+            60
+          ]
+        }
+      ]
+    },
+    "single-column": {
+      "class_count": 54,
+      "class_size_histogram": {
+        "1": 49,
+        "2": 4,
+        "3": 1
+      },
+      "k": 1,
+      "l": 1,
+      "missing_class": null,
+      "t": 0.666667,
+      "undecided_rows": [],
+      "unique_records": [
+        10,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "violations": [
+        {
+          "count": 3,
+          "key": "age=20|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            1,
+            6,
+            11
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            21
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            16
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            26
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00002|dob=1990-01|sex=NULL",
+          "row_numbers": [
+            31
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            36
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            41
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            46
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            51
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00004|dob=1990-06|sex=M",
+          "row_numbers": [
+            56
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=30|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            2,
+            7
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            17
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            22
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            27
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            37
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            32
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            42
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            47
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00004|dob=1990-05|sex=M",
+          "row_numbers": [
+            52
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00004|dob=1990-06|sex=F",
+          "row_numbers": [
+            57
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=40|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            3,
+            8
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            13
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            18
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            23
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            28
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            33
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            38
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            43
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00003|dob=1990-04|sex=M",
+          "row_numbers": [
+            48
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00004|dob=1990-05|sex=F",
+          "row_numbers": [
+            53
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00009|dob=1999-09|sex=M",
+          "row_numbers": [
+            58
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=50|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            4,
+            9
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            19
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            14
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            29
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            24
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            39
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1990-02|sex=M",
+          "row_numbers": [
+            34
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00003|dob=1990-03|sex=NULL",
+          "row_numbers": [
+            44
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00003|dob=1990-04|sex=F",
+          "row_numbers": [
+            49
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00004|dob=1990-05|sex=M",
+          "row_numbers": [
+            54
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00009|dob=1999-08|sex=F",
+          "row_numbers": [
+            59
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            10
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-02|sex=F",
+          "row_numbers": [
+            15
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00001|dob=1990-02|sex=M",
+          "row_numbers": [
+            20
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-01|sex=F",
+          "row_numbers": [
+            25
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-01|sex=M",
+          "row_numbers": [
+            30
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00002|dob=1990-02|sex=F",
+          "row_numbers": [
+            35
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-03|sex=F",
+          "row_numbers": [
+            45
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-03|sex=M",
+          "row_numbers": [
+            40
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00003|dob=1990-04|sex=M",
+          "row_numbers": [
+            50
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00004|dob=1990-06|sex=F",
+          "row_numbers": [
+            55
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=60|zip=zip-00010|dob=1999-07|sex=M",
+          "row_numbers": [
+            60
+          ]
+        },
+        {
+          "count": 2,
+          "key": "age=NULL|zip=zip-00001|dob=1990-01|sex=F",
+          "row_numbers": [
+            5,
+            12
+          ]
+        }
+      ]
+    }
+  },
+  "collapse_sets_status": "non-exhaustive",
+  "columns": [
+    "age",
+    "zip",
+    "dob",
+    "sex",
+    "disease",
+    "name",
+    "phone",
+    "note"
+  ],
+  "declaration": {
+    "columns": {
+      "age": {
+        "role": "qi"
+      },
+      "disease": {
+        "role": "sensitive"
+      },
+      "dob": {
+        "role": "qi"
+      },
+      "name": {
+        "role": "direct-identifier"
+      },
+      "phone": {
+        "role": "direct-identifier"
+      },
+      "sex": {
+        "role": "qi"
+      },
+      "zip": {
+        "role": "qi"
+      }
+    }
+  },
+  "declaration_order": [
+    {
+      "name": "age",
+      "role": "qi"
+    },
+    {
+      "name": "zip",
+      "role": "qi"
+    },
+    {
+      "name": "dob",
+      "role": "qi"
+    },
+    {
+      "name": "sex",
+      "role": "qi"
+    },
+    {
+      "name": "disease",
+      "role": "sensitive"
+    },
+    {
+      "name": "name",
+      "role": "direct-identifier"
+    },
+    {
+      "name": "phone",
+      "role": "direct-identifier"
+    }
+  ],
+  "empty_set_witness": false,
+  "fixture": "small",
+  "k_by_columns": {
+    "[\"age\",\"dob\",\"sex\",\"zip\"]": 1,
+    "[\"age\",\"dob\"]": 1,
+    "[\"age\",\"sex\"]": 4,
+    "[\"age\",\"zip\"]": 1,
+    "[\"age\"]": 11,
+    "[\"dob\",\"sex\"]": 1,
+    "[\"dob\",\"zip\"]": 1,
+    "[\"dob\"]": 1,
+    "[\"sex\",\"zip\"]": 1,
+    "[\"sex\"]": 23,
+    "[\"zip\"]": 1,
+    "[]": 60
+  },
+  "k_l_t": {
+    "class_count": 51,
+    "class_size_histogram": {
+      "1": 47,
+      "2": 3,
+      "3": 1
+    },
+    "k": 1,
+    "l": 1,
+    "missing_class": null,
+    "t": 0.678571,
+    "undecided_rows": [
+      5,
+      12,
+      31,
+      44
+    ]
+  },
+  "meta": {
+    "budget": 256,
+    "generator": "tools/gen_fixtures.py",
+    "oracle": "tools/fixture_oracle.py",
+    "policy": "drop",
+    "pool": [
+      "age",
+      "dob",
+      "sex",
+      "zip"
+    ],
+    "threshold": 5
+  },
+  "minimal_collapse_sets": [
+    [
+      "age"
+    ],
+    [
+      "sex"
+    ]
+  ],
+  "missing_cells": [
+    {
+      "column": "age",
+      "row": 5
+    },
+    {
+      "column": "age",
+      "row": 12
+    },
+    {
+      "column": "sex",
+      "row": 31
+    },
+    {
+      "column": "sex",
+      "row": 44
+    }
+  ],
+  "missing_rows": [
+    5,
+    12,
+    31,
+    44
+  ],
+  "planted": [
+    {
+      "class_keys": [
+        "zip=zip-00009|dob=1999-08",
+        "zip=zip-00009|dob=1999-09",
+        "zip=zip-00010|dob=1999-07"
+      ],
+      "columns": [
+        "zip",
+        "dob"
+      ],
+      "expected_count": 3,
+      "kind": "singleton_classes",
+      "row_numbers": [
+        58,
+        59,
+        60
+      ]
+    },
+    {
+      "class_key": "zip=zip-00001|dob=1990-01",
+      "columns": [
+        "zip",
+        "dob"
+      ],
+      "expected_l": 1,
+      "kind": "l_equals_one",
+      "row_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "columns": [
+        "age",
+        "sex"
+      ],
+      "kind": "missing_tokens",
+      "row_numbers": [
+        5,
+        12,
+        31,
+        44
+      ],
+      "tokens": [
+        "",
+        "NA",
+        "-",
+        "null"
+      ]
+    }
+  ],
+  "qi_columns": [
+    "age",
+    "zip",
+    "dob",
+    "sex"
+  ],
+  "rows": 60,
+  "search": {
+    "budget": 256,
+    "candidate_count": 4,
+    "completeness": "monotonicity-not-applicable",
+    "empty_set_k": 60,
+    "empty_set_witness": false,
+    "evaluated_subsets": 16,
+    "minimal_collapse_sets": [
+      [
+        "age"
+      ],
+      [
+        "sex"
+      ]
+    ],
+    "monotonicity_applicable": false,
+    "non_exhaustive": true,
+    "policy": "drop",
+    "pool": [
+      "age",
+      "dob",
+      "sex",
+      "zip"
+    ],
+    "pruned_subsets": 0,
+    "qi_columns": [
+      "age",
+      "zip",
+      "dob",
+      "sex"
+    ],
+    "subset_space": 15,
+    "threshold": 5,
+    "verdict": "ok"
+  },
+  "search_scenarios": [
+    {
+      "budget": null,
+      "candidate_count": 4,
+      "completeness": "monotonicity-not-applicable",
+      "empty_set_k": 60,
+      "empty_set_witness": false,
+      "evaluated_subsets": 16,
+      "minimal_collapse_sets": [
+        [
+          "age"
+        ],
+        [
+          "sex"
+        ]
+      ],
+      "monotonicity_applicable": false,
+      "name": "default",
+      "non_exhaustive": true,
+      "pruned_subsets": 0,
+      "subset_space": 15,
+      "threshold": 5,
+      "verdict": "ok"
+    },
+    {
+      "budget": null,
+      "candidate_count": 4,
+      "completeness": "monotonicity-not-applicable",
+      "empty_set_k": 60,
+      "empty_set_witness": true,
+      "evaluated_subsets": 16,
+      "minimal_collapse_sets": [
+        []
+      ],
+      "monotonicity_applicable": false,
+      "name": "empty_set_witness",
+      "non_exhaustive": true,
+      "pruned_subsets": 0,
+      "subset_space": 15,
+      "threshold": 24,
+      "verdict": "ok"
+    },
+    {
+      "budget": null,
+      "candidate_count": 4,
+      "completeness": "exhausted",
+      "empty_set_k": 60,
+      "empty_set_witness": false,
+      "evaluated_subsets": 1,
+      "minimal_collapse_sets": [],
+      "monotonicity_applicable": false,
+      "name": "no_solution",
+      "non_exhaustive": false,
+      "pruned_subsets": 0,
+      "subset_space": 15,
+      "threshold": 61,
+      "verdict": "no_solution"
+    }
+  ],
+  "seed": 20261020,
+  "sensitive_columns": [
+    "disease"
+  ],
+  "unique_records": [
+    10,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60
+  ],
+  "violations": [
+    {
+      "count": 3,
+      "key": "age=20|zip=zip-00001|dob=1990-01|sex=F",
+      "row_numbers": [
+        1,
+        6,
+        11
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00001|dob=1990-02|sex=F",
+      "row_numbers": [
+        21
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00001|dob=1990-02|sex=M",
+      "row_numbers": [
+        16
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00002|dob=1990-01|sex=M",
+      "row_numbers": [
+        26
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00002|dob=1990-02|sex=M",
+      "row_numbers": [
+        36
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00003|dob=1990-03|sex=F",
+      "row_numbers": [
+        41
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00003|dob=1990-03|sex=M",
+      "row_numbers": [
+        46
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00003|dob=1990-04|sex=F",
+      "row_numbers": [
+        51
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00004|dob=1990-06|sex=M",
+      "row_numbers": [
+        56
+      ]
+    },
+    {
+      "count": 2,
+      "key": "age=30|zip=zip-00001|dob=1990-01|sex=F",
+      "row_numbers": [
+        2,
+        7
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00001|dob=1990-02|sex=F",
+      "row_numbers": [
+        17
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00001|dob=1990-02|sex=M",
+      "row_numbers": [
+        22
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00002|dob=1990-01|sex=F",
+      "row_numbers": [
+        27
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00002|dob=1990-02|sex=F",
+      "row_numbers": [
+        37
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00002|dob=1990-02|sex=M",
+      "row_numbers": [
+        32
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00003|dob=1990-03|sex=M",
+      "row_numbers": [
+        42
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00003|dob=1990-04|sex=F",
+      "row_numbers": [
+        47
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00004|dob=1990-05|sex=M",
+      "row_numbers": [
+        52
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00004|dob=1990-06|sex=F",
+      "row_numbers": [
+        57
+      ]
+    },
+    {
+      "count": 2,
+      "key": "age=40|zip=zip-00001|dob=1990-01|sex=F",
+      "row_numbers": [
+        3,
+        8
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00001|dob=1990-02|sex=F",
+      "row_numbers": [
+        13
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00001|dob=1990-02|sex=M",
+      "row_numbers": [
+        18
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00002|dob=1990-01|sex=F",
+      "row_numbers": [
+        23
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00002|dob=1990-01|sex=M",
+      "row_numbers": [
+        28
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00002|dob=1990-02|sex=F",
+      "row_numbers": [
+        33
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00002|dob=1990-02|sex=M",
+      "row_numbers": [
+        38
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00003|dob=1990-03|sex=F",
+      "row_numbers": [
+        43
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00003|dob=1990-04|sex=M",
+      "row_numbers": [
+        48
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00004|dob=1990-05|sex=F",
+      "row_numbers": [
+        53
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00009|dob=1999-09|sex=M",
+      "row_numbers": [
+        58
+      ]
+    },
+    {
+      "count": 2,
+      "key": "age=50|zip=zip-00001|dob=1990-01|sex=F",
+      "row_numbers": [
+        4,
+        9
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00001|dob=1990-02|sex=F",
+      "row_numbers": [
+        19
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00001|dob=1990-02|sex=M",
+      "row_numbers": [
+        14
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00002|dob=1990-01|sex=F",
+      "row_numbers": [
+        29
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00002|dob=1990-01|sex=M",
+      "row_numbers": [
+        24
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00002|dob=1990-02|sex=F",
+      "row_numbers": [
+        39
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00002|dob=1990-02|sex=M",
+      "row_numbers": [
+        34
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00003|dob=1990-04|sex=F",
+      "row_numbers": [
+        49
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00004|dob=1990-05|sex=M",
+      "row_numbers": [
+        54
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00009|dob=1999-08|sex=F",
+      "row_numbers": [
+        59
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00001|dob=1990-01|sex=F",
+      "row_numbers": [
+        10
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00001|dob=1990-02|sex=F",
+      "row_numbers": [
+        15
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00001|dob=1990-02|sex=M",
+      "row_numbers": [
+        20
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00002|dob=1990-01|sex=F",
+      "row_numbers": [
+        25
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00002|dob=1990-01|sex=M",
+      "row_numbers": [
+        30
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00002|dob=1990-02|sex=F",
+      "row_numbers": [
+        35
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00003|dob=1990-03|sex=F",
+      "row_numbers": [
+        45
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00003|dob=1990-03|sex=M",
+      "row_numbers": [
+        40
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00003|dob=1990-04|sex=M",
+      "row_numbers": [
+        50
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00004|dob=1990-06|sex=F",
+      "row_numbers": [
+        55
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=60|zip=zip-00010|dob=1999-07|sex=M",
+      "row_numbers": [
+        60
+      ]
+    }
+  ]
+}

@@ -30,16 +30,16 @@
 | 里程碑 | 内容 | 状态 |
 | --- | --- | --- |
 | **M0** | 出题定稿 + 方法论装订 + 计划套件 + 可运行骨架（CLI 契约 / 确定性序列化 / 退出码映射 / CI） | ✅ 2026-10-20 |
-| **M1** | 数据先行：植入已知违例的合成夹具 + 独立真值 + Adult 基线 | ⬜ |
+| **M1** | 数据先行：植入已知违例的合成夹具 + 独立真值 + Adult 基线 | ✅ 2026-10-20 |
 | **M2** | 等价类引擎：k / l / t、三种缺失策略、违例行号 | ⬜ |
 | **M3** | 组合攻击面搜索：反单调剪枝、最小崩塌集、三态完整性 | ⬜ |
 | **M4** | 逐记录风险与三种攻击者口径 | ⬜ |
 | **M5** | gate + 判据文件：JSON + 人读报告 + 退出码 | ⬜ |
 | **M6** | 发布：tag + Release + 留档 | ⬜ |
 
-> **当前版本是骨架（M0）**：五条子命令的**输入校验与退出码契约已生效**，
-> 计算实现尚未落地——调用会明确返回 `MODULE_NOT_READY` 与退出码 `2`（fail-closed），
-> **不会**用空结果冒充通过。
+> **当前进度：M0–M1 完成。** 五条子命令的**输入校验与退出码契约已生效**；
+> 计算实现（M2–M5）尚未落地——调用会明确返回 `MODULE_NOT_READY` 与退出码 `2`（fail-closed），
+> **不会**用空结果冒充通过。M1 已交付：四组植入已知违例的合成夹具 + **独立 oracle** 复算的真值 + `manifest.json`。
 
 ## 安装
 
@@ -91,10 +91,15 @@ k / l / t 的定义、QI 候选打分、缺失策略语义、剪枝与完整性�
 ## 开发
 
 ```bash
-python -m pytest                     # 全量测试（无需安装，conftest 已把 src/ 放进路径）
+python -m pytest                        # 全量测试（无需安装，conftest 已把 src/ 放进路径）
 py -3.12 tools/check_sprint_layout.py   # 布局门（方法论装订）
 py -3.12 tools/verify_layout_gate.py    # 布局门的变异验证（10 组，必须全部变红）
 py -3.12 tools/scaffold_selftest.py     # 口径单点自检（版本 / 依赖 / 退出码 / 序列化）
+
+# 夹具（M1）：表不入库，真值与 manifest 入库
+py -3.12 tools/gen_fixtures.py              # 全集生成（表 + 真值 + manifest）
+py -3.12 tools/gen_fixtures.py --check      # 重生成并与入仓真值逐字节比对
+py -3.12 tools/adult_baseline.py --table <adult.data>   # Adult 读入基线（只读本地，不代下载）
 ```
 
 本仓库遵循 `ai-tool-project-sprint` 方法论：先计划（`plan/`）再实现，每个里程碑有交接单，
@@ -112,11 +117,14 @@ py -3.12 tools/scaffold_selftest.py     # 口径单点自检（版本 / 依赖 /
 | [`plan/05-里程碑与发布.md`](plan/05-里程碑与发布.md) | 逐里程碑 DoD / 风险登记 / 发布路径 |
 | [`plan/06-交付对标与决策.md`](plan/06-交付对标与决策.md) | 评分对标 / 未闭合项 |
 | [`data/README.md`](data/README.md) | 依据查证三态 / 数据源 / **数值口径单点定义** |
+| [`data/fixtures/README.md`](data/fixtures/README.md) | 合成夹具怎么用：目录 / 命令 / truth.json 结构 / 行号语义 |
 
 ## 隐私与数据
 
-- 仓库**不收录**任何真实个人数据（`.gitignore` 排除 `*.csv` / `*.tsv` / `*.parquet`）。
-- 示例与夹具全部为**明显虚构的合成值**，由生成器程序化产出（M1 起）。
+- 仓库**不收录**任何真实个人数据（`.gitignore` 排除 `*.csv` / `*.tsv` / `*.parquet` / UCI Adult 的 `*.data` / `*.names`）。
+- 示例与夹具全部为**明显虚构的合成值**，由 `tools/gen_fixtures.py` 程序化产出（固定种子 + 自研 splitmix64）；
+  表格本体不入库，入库的是**真值**（由不 import 生产模块的独立 oracle 复算）。
+- UCI Adult 只作**演示规模基线**，脚本只读本地文件、**不代下载**（`data/README.md` §二）。
 - 安装后从 `--help` 到报告生成**全程无出站请求**。
 
 ## 许可证

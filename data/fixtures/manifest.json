@@ -1,0 +1,135 @@
+{
+  "format": 1,
+  "generator": "tools/gen_fixtures.py",
+  "generator_sha256": "e10734447fdabf5ed3193a6e9d0b0c156da5bcb2702fc42383b5f48e5aeedb93",
+  "oracle": "tools/fixture_oracle.py",
+  "oracle_sha256": "17989aed39fbbdf25324d5b19434d7cacf78b4449f85c6ea4868b2fa1d13d082",
+  "seed": 20261020,
+  "suites": {
+    "budget": {
+      "columns": [
+        "c01_age",
+        "c02_zip",
+        "c03_dob",
+        "c04_sex",
+        "c05_region",
+        "c06_income",
+        "c07_edu",
+        "c08_job",
+        "c09_house",
+        "c10_car"
+      ],
+      "params": {
+        "budget": 40,
+        "generator": "tools/gen_fixtures.py",
+        "oracle": "tools/fixture_oracle.py",
+        "policy": "drop",
+        "pool": [
+          "c01_age",
+          "c02_zip",
+          "c03_dob",
+          "c04_sex",
+          "c05_region",
+          "c06_income",
+          "c07_edu",
+          "c08_job",
+          "c09_house",
+          "c10_car"
+        ],
+        "threshold": 5
+      },
+      "rows": 1200,
+      "table": "budget/table.csv",
+      "truth": "budget/truth.json",
+      "truth_sha256": "dd0ad85c7cd860a56967e1cb45ca7d4d7117b84ce7df44c8b78020b2aaea98d5"
+    },
+    "prune": {
+      "columns": [
+        "age",
+        "zip",
+        "dob",
+        "sex",
+        "region",
+        "disease",
+        "name",
+        "phone",
+        "note"
+      ],
+      "params": {
+        "budget": 4096,
+        "generator": "tools/gen_fixtures.py",
+        "oracle": "tools/fixture_oracle.py",
+        "policy": "drop",
+        "pool": [
+          "age",
+          "dob",
+          "region",
+          "sex",
+          "zip"
+        ],
+        "threshold": 5
+      },
+      "rows": 300,
+      "table": "prune/table.csv",
+      "truth": "prune/truth.json",
+      "truth_sha256": "e58e41da1cb9c84ada782f2f7076341427cbfdc7b24ad29a2ddc488fc4c2d568"
+    },
+    "small": {
+      "columns": [
+        "age",
+        "zip",
+        "dob",
+        "sex",
+        "disease",
+        "name",
+        "phone",
+        "note"
+      ],
+      "params": {
+        "budget": 256,
+        "generator": "tools/gen_fixtures.py",
+        "oracle": "tools/fixture_oracle.py",
+        "policy": "drop",
+        "pool": [
+          "age",
+          "dob",
+          "sex",
+          "zip"
+        ],
+        "threshold": 5
+      },
+      "rows": 60,
+      "table": "small/table.csv",
+      "truth": "small/truth.json",
+      "truth_sha256": "60fb82fb5d60fd612bd5dd2010eac5a058484281d013da402357e3cc4c1c4677"
+    },
+    "tiny": {
+      "columns": [
+        "age",
+        "zip",
+        "dob",
+        "sex",
+        "disease",
+        "name",
+        "phone"
+      ],
+      "params": {
+        "budget": 64,
+        "generator": "tools/gen_fixtures.py",
+        "oracle": "tools/fixture_oracle.py",
+        "policy": "drop",
+        "pool": [
+          "age",
+          "dob",
+          "sex",
+          "zip"
+        ],
+        "threshold": 3
+      },
+      "rows": 12,
+      "table": "tiny/table.csv",
+      "truth": "tiny/truth.json",
+      "truth_sha256": "6de4730029000298510c55e95875efd2e8fce6aa70b7a8c39640a0501de1ad98"
+    }
+  }
+}

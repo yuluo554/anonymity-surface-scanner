@@ -1,0 +1,467 @@
+{
+  "by_policy": {
+    "drop": {
+      "class_count": 12,
+      "class_size_histogram": {
+        "1": 12
+      },
+      "k": 1,
+      "l": 1,
+      "missing_class": null,
+      "t": 0.666667,
+      "undecided_rows": [],
+      "unique_records": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "violations": [
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00001|dob=1960-01|sex=F",
+          "row_numbers": [
+            1
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00002|dob=1960-02|sex=M",
+          "row_numbers": [
+            2
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=20|zip=zip-00003|dob=1960-03|sex=F",
+          "row_numbers": [
+            3
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00001|dob=1960-04|sex=M",
+          "row_numbers": [
+            4
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00002|dob=1960-05|sex=F",
+          "row_numbers": [
+            5
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=30|zip=zip-00003|dob=1960-06|sex=M",
+          "row_numbers": [
+            6
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00001|dob=1960-07|sex=F",
+          "row_numbers": [
+            7
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00002|dob=1960-08|sex=M",
+          "row_numbers": [
+            8
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=40|zip=zip-00003|dob=1960-09|sex=F",
+          "row_numbers": [
+            9
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00001|dob=1960-10|sex=M",
+          "row_numbers": [
+            10
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00002|dob=1960-11|sex=F",
+          "row_numbers": [
+            11
+          ]
+        },
+        {
+          "count": 1,
+          "key": "age=50|zip=zip-00003|dob=1960-12|sex=M",
+          "row_numbers": [
+            12
+          ]
+        }
+      ]
+    },
+    "separate-class": {
+      "same_as": "drop"
+    },
+    "single-column": {
+      "same_as": "drop"
+    }
+  },
+  "collapse_sets_status": "exhaustive",
+  "columns": [
+    "age",
+    "zip",
+    "dob",
+    "sex",
+    "disease",
+    "name",
+    "phone"
+  ],
+  "declaration": {
+    "columns": {
+      "age": {
+        "role": "qi"
+      },
+      "disease": {
+        "role": "sensitive"
+      },
+      "dob": {
+        "role": "qi"
+      },
+      "name": {
+        "role": "direct-identifier"
+      },
+      "phone": {
+        "role": "direct-identifier"
+      },
+      "sex": {
+        "role": "qi"
+      },
+      "zip": {
+        "role": "qi"
+      }
+    }
+  },
+  "declaration_order": [
+    {
+      "name": "age",
+      "role": "qi"
+    },
+    {
+      "name": "zip",
+      "role": "qi"
+    },
+    {
+      "name": "dob",
+      "role": "qi"
+    },
+    {
+      "name": "sex",
+      "role": "qi"
+    },
+    {
+      "name": "disease",
+      "role": "sensitive"
+    },
+    {
+      "name": "name",
+      "role": "direct-identifier"
+    },
+    {
+      "name": "phone",
+      "role": "direct-identifier"
+    }
+  ],
+  "empty_set_witness": false,
+  "fixture": "tiny",
+  "k_by_columns": {
+    "[\"age\",\"dob\",\"sex\",\"zip\"]": 1,
+    "[\"age\",\"dob\"]": 1,
+    "[\"age\",\"sex\"]": 1,
+    "[\"age\",\"zip\"]": 1,
+    "[\"age\"]": 3,
+    "[\"dob\",\"sex\"]": 1,
+    "[\"dob\",\"zip\"]": 1,
+    "[\"dob\"]": 1,
+    "[\"sex\",\"zip\"]": 2,
+    "[\"sex\"]": 6,
+    "[\"zip\"]": 4,
+    "[]": 12
+  },
+  "k_l_t": {
+    "class_count": 12,
+    "class_size_histogram": {
+      "1": 12
+    },
+    "k": 1,
+    "l": 1,
+    "missing_class": null,
+    "t": 0.666667,
+    "undecided_rows": []
+  },
+  "meta": {
+    "budget": 64,
+    "generator": "tools/gen_fixtures.py",
+    "oracle": "tools/fixture_oracle.py",
+    "policy": "drop",
+    "pool": [
+      "age",
+      "dob",
+      "sex",
+      "zip"
+    ],
+    "threshold": 3
+  },
+  "minimal_collapse_sets": [
+    [
+      "age"
+    ],
+    [
+      "sex"
+    ],
+    [
+      "zip"
+    ]
+  ],
+  "missing_cells": [],
+  "missing_rows": [],
+  "planted": [
+    {
+      "columns": [
+        "age"
+      ],
+      "expected_k": 3,
+      "kind": "single_column_min_class"
+    },
+    {
+      "columns": [
+        "age",
+        "zip"
+      ],
+      "expected_k": 1,
+      "kind": "pair_collapses_to_singletons"
+    }
+  ],
+  "qi_columns": [
+    "age",
+    "zip",
+    "dob",
+    "sex"
+  ],
+  "rows": 12,
+  "search": {
+    "budget": 64,
+    "candidate_count": 4,
+    "completeness": "exhausted",
+    "empty_set_k": 12,
+    "empty_set_witness": false,
+    "evaluated_subsets": 8,
+    "minimal_collapse_sets": [
+      [
+        "age"
+      ],
+      [
+        "sex"
+      ],
+      [
+        "zip"
+      ]
+    ],
+    "monotonicity_applicable": true,
+    "non_exhaustive": false,
+    "policy": "drop",
+    "pool": [
+      "age",
+      "dob",
+      "sex",
+      "zip"
+    ],
+    "pruned_subsets": 8,
+    "qi_columns": [
+      "age",
+      "zip",
+      "dob",
+      "sex"
+    ],
+    "subset_space": 15,
+    "threshold": 3,
+    "verdict": "ok"
+  },
+  "search_scenarios": [
+    {
+      "budget": null,
+      "candidate_count": 4,
+      "completeness": "exhausted",
+      "empty_set_k": 12,
+      "empty_set_witness": false,
+      "evaluated_subsets": 8,
+      "minimal_collapse_sets": [
+        [
+          "age"
+        ],
+        [
+          "sex"
+        ],
+        [
+          "zip"
+        ]
+      ],
+      "monotonicity_applicable": true,
+      "name": "default",
+      "non_exhaustive": false,
+      "pruned_subsets": 8,
+      "subset_space": 15,
+      "threshold": 3,
+      "verdict": "ok"
+    },
+    {
+      "budget": null,
+      "candidate_count": 4,
+      "completeness": "exhausted",
+      "empty_set_k": 12,
+      "empty_set_witness": true,
+      "evaluated_subsets": 5,
+      "minimal_collapse_sets": [
+        []
+      ],
+      "monotonicity_applicable": true,
+      "name": "empty_set_witness",
+      "non_exhaustive": false,
+      "pruned_subsets": 11,
+      "subset_space": 15,
+      "threshold": 7,
+      "verdict": "ok"
+    },
+    {
+      "budget": null,
+      "candidate_count": 4,
+      "completeness": "exhausted",
+      "empty_set_k": 12,
+      "empty_set_witness": false,
+      "evaluated_subsets": 1,
+      "minimal_collapse_sets": [],
+      "monotonicity_applicable": true,
+      "name": "no_solution",
+      "non_exhaustive": false,
+      "pruned_subsets": 0,
+      "subset_space": 15,
+      "threshold": 13,
+      "verdict": "no_solution"
+    }
+  ],
+  "seed": 20261020,
+  "sensitive_columns": [
+    "disease"
+  ],
+  "unique_records": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "violations": [
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00001|dob=1960-01|sex=F",
+      "row_numbers": [
+        1
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00002|dob=1960-02|sex=M",
+      "row_numbers": [
+        2
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=20|zip=zip-00003|dob=1960-03|sex=F",
+      "row_numbers": [
+        3
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00001|dob=1960-04|sex=M",
+      "row_numbers": [
+        4
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00002|dob=1960-05|sex=F",
+      "row_numbers": [
+        5
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=30|zip=zip-00003|dob=1960-06|sex=M",
+      "row_numbers": [
+        6
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00001|dob=1960-07|sex=F",
+      "row_numbers": [
+        7
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00002|dob=1960-08|sex=M",
+      "row_numbers": [
+        8
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=40|zip=zip-00003|dob=1960-09|sex=F",
+      "row_numbers": [
+        9
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00001|dob=1960-10|sex=M",
+      "row_numbers": [
+        10
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00002|dob=1960-11|sex=F",
+      "row_numbers": [
+        11
+      ]
+    },
+    {
+      "count": 1,
+      "key": "age=50|zip=zip-00003|dob=1960-12|sex=M",
+      "row_numbers": [
+        12
+      ]
+    }
+  ]
+}

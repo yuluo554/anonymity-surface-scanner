@@ -91,9 +91,24 @@ sdv **53,772** ／ sdmetrics **71,380** ／ opendp **36,323** ／ diffprivlib **
 
 | 数据源 | 获取方式 | 是否必需 | 状态 |
 | --- | --- | --- | --- |
-| 合成夹具（本项目生成） | `data/fixtures/` 由生成器程序化产出 | **是**（默认路径） | ✅ 无外部依赖 |
-| UCI Adult（Census Income） | UCI Machine Learning Repository 公开下载（`adult.data` / `adult.test` / `adult.names`） | 否（仅演示） | ✅ 公开可下载（基准日核对可获取路径；**具体下载 URL、文件哈希与列定义以 M1 实测回填，不在此预写**） |
+| 合成夹具（本项目生成） | `data/fixtures/` 由 `tools/gen_fixtures.py` 程序化产出 | **是**（默认路径） | ✅ 无外部依赖 |
+| UCI Adult（Census Income） | UCI Machine Learning Repository 公开下载（`adult.data` / `adult.test` / `adult.names`） | 否（仅演示） | ✅ **M1 实测读入通过**（见下） |
 | 真实个人数据 | — | **否，且禁止** | ❌ 明令禁止 |
+
+**Adult 实测记录（2026-10-20，M1 回填；只作规模基线，不参与任何真值）**
+
+| 项 | 实测值 |
+| --- | --- |
+| 下载地址（实测可用） | `https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data` |
+| `adult.data` 字节数 | `3974305` |
+| `adult.data` sha256 | `5b00264637dbfec36bdeaab5676b0b309ff9eb788d63554ca0a249491c86603d` |
+| 行数 × 列数 | **32561 × 15**（与本项目期望值一致） |
+| 格式 | **无表头**，逗号分隔，每行尾部带一个空字段（`,…,<=50K,`）；缺失写作 ` ?` |
+| 含 `?` 的列与计数 | `workclass=1836` / `occupation=1843` / `native-country=583` |
+| 复跑命令 | `py -3.12 tools/adult_baseline.py --table <adult.data>` |
+
+> 上表是**读入基线**，不是隐私指标。`adult.data` **不入库**（`.gitignore` 排除 `*.csv`；`.data` 后缀也不入库）；
+> k/l/t 的实跑数字属 M5 的 `EXPECTED.md`，届时按实跑回填，本文不预写。
 
 - **安装后零网络**：`pip install` 之后，从 `--help` 到报告生成全程不得发起出站请求；Adult 演示需要用户**自行**提前下载数据（脚本只读本地文件，不替我下载）。
 - **仓库不入库任何数据表**：`.gitignore` 排除 `*.csv` 示例数据目录（见根 `.gitignore`）；`examples/adult/` 只入库脚本、判据与期望输出摘要。
@@ -155,6 +170,7 @@ sdv **53,772** ／ sdmetrics **71,380** ／ opendp **36,323** ／ diffprivlib **
 
 - 未指定策略 → **报错退出（退出码 2）**，不猜、不默认。
 - 三种策略的结果分别计算、分别可复算；不得把某策略的结论套用到另一策略。
+- **"含缺失的行"看哪些列**：只看**本次参与分组的列**（当前子集）。理由：这一行的去留由"它要用作键的那些列"决定；未参与分组的列缺不缺，不影响它进哪个类。这条同时决定了 §4.5 的单调性前提——`drop` 下若候选池里存在含缺失的列，**加这一列会减少参与分组的行集**，`k(S ∪ {c}) ≤ k(S)` 不再由定义保证（状态必须是 `monotonicity-not-applicable`，且此时**不得剪枝**）。
 
 ### 4.5 组合搜索：剪枝、预算与完整性三态
 
@@ -172,9 +188,19 @@ sdv **53,772** ／ sdmetrics **71,380** ／ opendp **36,323** ／ diffprivlib **
 | `budget-truncated`（被预算截断） | 存在本应评估但因预算未评估的子集；**不得声称穷尽** |
 | `monotonicity-not-applicable`（单调性不适用） | 启用了会破坏单调性的操作（泛化、抑制、行过滤、或 `drop` 策略下加列改变被丢行集等），**不得声称穷尽**，也不得把剪枝结果当结论 |
 
-**最小崩塌集**：子集 S 满足 `k(S) ≥ k_threshold`，且对候选池中任一 `c ∉ S`，`k(S ∪ {c})` 为 `undefined` 或 `< k_threshold`。若单列已达阈值，最小崩塌集为**空集**（报告中显式表达，不输出空数组冒充"无结果"）；若独立候选池全部不达标，明确报**无解**。存在多个最小崩塌集时**全部列出**（按枚举顺序），不得只显示第一个。
+**最小崩塌集（= 崩塌边界集）**：子集 S 满足 `k(S) ≥ k_threshold`（称 S **安全**），且对候选池中任一 `c ∉ S`，`k(S ∪ {c})` 为 `undefined` 或 `< k_threshold`。存在多个时**全部列出**（按枚举顺序），不得只显示第一个。
 
-**歧义纪律**：`budget-truncated` 与 `monotonicity-not-applicable` 下的任何"最小崩塌集"都必须**标注为非穷尽结果**，措辞不得写成"最小"。
+**空集的含义（易错点，M1 起以此为准）**：空集的 k = **参与分组的行数**（一张表就是一个类）。因此：
+
+| 情形 | 结论 |
+| --- | --- |
+| 存在单列安全 | 该单列本身就是边界集（如 `[["sex"]]`）；空集**不是**边界集（它有一列安全扩展） |
+| **没有任何**单列安全（每一列都要么 `undefined`、要么 `< k_threshold`） | 空集是边界集 → `minimal_collapse_sets: [[]]` + `empty_set_witness: true`，语义 = **一个 QI 列都不能加** |
+| 空集本身不安全（行数 `< k_threshold`，或没有任何行参与分组） | `verdict: "no_solution"`，明确报**无解**；不得输出空数组冒充"无结果" |
+
+> 反例纪律：`[[]]` 的语义是"连一列都不能加"，**不是**"什么都不用声明"。把这句写反会让工具在最危险的方向上给出最放松的结论（`plan/00` 勘误 E2 记录了 `plan/01` 原文这处措辞）。
+
+**非穷尽时不得叫"最小"**：`budget-truncated` 与 `monotonicity-not-applicable` 下的崩塌集必须标注为**非穷尽结果**（真值里的 `collapse_sets_status` 字段即为此设），措辞不得写成"最小"。
 
 ### 4.6 退出码（闭合集合）
 

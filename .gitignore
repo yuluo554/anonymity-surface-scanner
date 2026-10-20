@@ -72,6 +72,9 @@ examples/**/*.tsv
 *.xls
 *.sav
 *.dta
+# UCI Adult 原始件（adult.data / adult.test）：只作演示规模基线，绝不入仓
+*.data
+*.names
 !data/fixtures/**/*.md
 
 # ---- 本地数据库与运行产物 ----
