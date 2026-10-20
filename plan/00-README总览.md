@@ -35,6 +35,7 @@
 | `tools/verify_layout_gate.py` | 布局门变异验证（10 组，逐组必须变红） | ✅ M0 |
 | `tools/scaffold_selftest.py` | 口径单点自检（版本 / 依赖 / 退出码 / 序列化） | ✅ M0 |
 | `.github/workflows/ci.yml` | CI：ubuntu/windows × 3.8/3.12 | ✅ M0（未推送，待首推验证） |
+| `.gitattributes` | 源码 eol=lf 归一 + 二进制/快照冻结（sha256 被登记的对象字节不许被 git 改写） | ✅ M0 |
 
 > **交接单规则**：`plan/HANDOFF-M<k>.md` = **第 k 棒的启动包**，由第 k−1 棒收尾时写（七节：当前进度 / 当前事实·状态不变量 / 待办 / 既定口径 K 编号 / 环境坑 / DoD 逐项 / 命令速查）。
 > 布局门对每个 ✅ 里程碑断言同名交接单存在且节齐。M0 已声明豁免（其收尾记录即本套件与 `plan/05` §二）。

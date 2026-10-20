@@ -1,0 +1,13 @@
+# 源码归一 + 快照冻结（两类规则必须分开）
+* text=auto eol=lf
+
+# 被 sha256 登记 / 逐字节断言的产物：git 不许碰字节
+*.png binary
+*.jpg binary
+*.pdf binary
+*.xlsx binary
+*.docx binary
+
+# Windows 专用脚本才允许 CRLF（当前无）
+*.bat text eol=crlf
+*.cmd text eol=crlf
