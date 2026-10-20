@@ -220,6 +220,22 @@ def test_scan_requires_qi_columns(capsys, table, tmp_path):
     assert "未声明任何 qi 列" in capsys.readouterr().err
 
 
+def test_scan_with_valid_arguments_computes(capsys, table, decl, tmp_path):
+    """M2 落地后：有效参数必须真的算出结果（不再 MODULE_NOT_READY），且产物按契约落盘。"""
+    code = main([
+        "scan", "--table", str(table), "--decl", str(decl),
+        "--missing-policy", "drop", "--k", "2", "--out-dir", str(tmp_path / "out"),
+    ])
+    captured = capsys.readouterr()
+    assert "MODULE_NOT_READY" not in captured.err
+    assert code == VIOLATION, "三行两列 QI 全是单例类 → k=1 < 2，退出码必须是有违例（1）"
+    document = json.loads((tmp_path / "out" / "scan.json").read_text(encoding="utf-8"))
+    assert document["k_l_t"]["k"] == 1
+    assert document["k_l_t"]["class_count"] == 3
+    assert document["verdict"] == "violation"
+    assert document["exit_code"] == VIOLATION
+
+
 # ── gate 判据文件 ─────────────────────────────────────────────────────────
 
 def _criteria(tmp_path, table, decl, **overrides):

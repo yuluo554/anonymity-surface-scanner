@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import __version__
+from . import __version__, canonical, m2_classes
 from .declaration import load_declaration, require_missing_policy
 from .exit_codes import (
     CriteriaError,
@@ -135,8 +135,50 @@ def _cmd_scan(args):
         raise CriteriaError("l 门限必须是正整数", repr(args.l))
     if args.t is not None and not (0.0 <= args.t <= 1.0):
         raise CriteriaError("t 门限必须落在 [0, 1]", repr(args.t))
-    _echo_declarations(decl, table, policy, _resolve_root(args.root))
-    raise ModuleNotReady("M2（等价类引擎）", "plan/03 §模块 M2 · 落地里程碑 M2")
+    sensitive = [column.name for column in decl.sensitive_columns()]
+    if (args.l is not None or args.t is not None) and not sensitive:
+        raise CriteriaError(
+            "声明了 l/t 门限但没有 sensitive 列",
+            "l/t 只在 sensitive 列上定义；给至少一列标 {\"role\": \"sensitive\"}",
+        )
+    root = _resolve_root(args.root)
+    _echo_declarations(decl, table, policy, root)
+
+    qi = [column.name for column in decl.qi_columns()]
+    result = m2_classes.summarize(
+        table, qi, sensitive, policy, args.k, l_threshold=args.l, t_threshold=args.t
+    )
+    metrics = result["k_l_t"]
+    document = {
+        "tool": PROG,
+        "version": __version__,
+        "command": "scan",
+        "table": canonical.relativize(table.source, root),
+        "rows": table.row_count,
+        "columns": list(table.header),
+        "qi_columns": qi,
+        "sensitive_columns": sensitive,
+        "missing_policy": policy,
+        "thresholds": {"k": args.k, "l": args.l, "t": args.t},
+        "k_l_t": metrics,
+        "violations": result["violations"],
+        "unique_records": result["unique_records"],
+        "unparticipating": decl.unparticipating(),
+        "direct_identifier_warning": decl.direct_identifier_warning(),
+        "undefined_reason": result["undefined_reason"],
+        "verdict": result["verdict"],
+        "exit_code": map_outcome(result["verdict"]),
+    }
+    out_dir = Path(args.out_dir)
+    canonical.write_json(out_dir / "scan.json", document)
+    sys.stderr.write(
+        "scan        : k=%r l=%r t=%r classes=%d violations=%d → %s (exit %d)\n"
+        % (
+            metrics["k"], metrics["l"], metrics["t"], metrics["class_count"],
+            len(result["violations"]), result["verdict"], document["exit_code"],
+        )
+    )
+    return result["verdict"]
 
 
 def _cmd_search(args):
@@ -230,7 +272,7 @@ def main(argv=None) -> int:
         sys.stderr.write("未知子命令: %r\n" % (args.command,))
         return map_outcome("undecidable")
     try:
-        handler(args)
+        outcome = handler(args)
     except ScannerError as exc:
         sys.stderr.write("%s: %s\n" % (type(exc).__name__, exc))
         return map_outcome(exc)
@@ -240,7 +282,8 @@ def main(argv=None) -> int:
     except Exception as exc:  # 内部错误绝不退化为 0
         sys.stderr.write("internal error: %r\n" % (exc,))
         return map_outcome("undecidable")
-    return map_outcome("pass")
+    # 计算面落地的子命令返回真实结论；其余（尚未落地）只会抛异常，走到这里时按"通过"处理。
+    return map_outcome("pass" if outcome is None else outcome)
 
 
 if __name__ == "__main__":  # pragma: no cover
