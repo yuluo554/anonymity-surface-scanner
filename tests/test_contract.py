@@ -138,16 +138,47 @@ def test_search_rejects_non_positive_budget(capsys, table, decl, tmp_path, budge
         "--out-dir", str(tmp_path / "out"),
     ])
     assert code == UNDECIDABLE
+    assert "搜索预算" in capsys.readouterr().err
 
 
-def test_search_with_valid_arguments_is_module_not_ready(capsys, table, decl, tmp_path):
+def test_search_requires_budget(capsys, table, decl, tmp_path):
+    code = main([
+        "search", "--table", str(table), "--decl", str(decl),
+        "--missing-policy", "drop", "--k", "3", "--out-dir", str(tmp_path / "out"),
+    ])
+    assert code == UNDECIDABLE
+    assert "搜索预算未指定" in capsys.readouterr().err
+    assert not (tmp_path / "out").exists()
+
+
+def test_search_requires_missing_policy(capsys, table, decl, tmp_path):
+    code = main([
+        "search", "--table", str(table), "--decl", str(decl),
+        "--k", "3", "--budget", "10", "--out-dir", str(tmp_path / "out"),
+    ])
+    assert code == UNDECIDABLE
+    assert "缺失值策略未指定" in capsys.readouterr().err
+
+
+def test_search_with_valid_arguments_computes(capsys, table, decl, tmp_path):
+    """M3 落地后：有效参数必须真的算出结果（不再 MODULE_NOT_READY），且产物按契约落盘。"""
     code = main([
         "search", "--table", str(table), "--decl", str(decl),
         "--missing-policy", "drop", "--k", "3", "--budget", "10",
         "--out-dir", str(tmp_path / "out"),
     ])
-    assert code == UNDECIDABLE
-    assert "M3" in capsys.readouterr().err
+    captured = capsys.readouterr()
+    assert "MODULE_NOT_READY" not in captured.err
+    assert code == VIOLATION, "完整 QI 只有 k=1 < 3 → 有违例（1）"
+    document = json.loads((tmp_path / "out" / "search.json").read_text(encoding="utf-8"))
+    result = document["search"]
+    assert result["verdict"] == "ok"
+    assert result["completeness"] == "exhausted"
+    assert result["empty_set_k"] == 3
+    assert result["minimal_collapse_sets"] == [[]], "两列单独都不安全 → 空集是边界集"
+    assert result["empty_set_witness"] is True
+    assert document["outcome"] == "violation"
+    assert document["exit_code"] == VIOLATION
 
 
 def test_risk_rejects_unknown_attacker(capsys, table, decl, tmp_path):

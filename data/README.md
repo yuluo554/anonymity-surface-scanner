@@ -202,6 +202,8 @@ sdv **53,772** ／ sdmetrics **71,380** ／ opendp **36,323** ／ diffprivlib **
 
 **非穷尽时不得叫"最小"**：`budget-truncated` 与 `monotonicity-not-applicable` 下的崩塌集必须标注为**非穷尽结果**（真值里的 `collapse_sets_status` 字段即为此设），措辞不得写成"最小"。
 
+**分层曲线（M3 输出项）**：按 `|S|` 聚合**实算过的**子集。`min_k` = 该层所有 `k` 的最小值（`undefined` 不参与聚合；整层都 `undefined` 则记 `null`）；`exposed_rows` = 取到 `min_k` 的那个子集（同值取列名码位序最先者）落进 `k < k_threshold` 的等价类中的行数。逐子集清单 `subsets` 用同一口径给出每条的 `k` / `exposed_rows` / `safe`。`drop` 下未裁决行不属于任何等价类，因此既不计入"暴露"也不计入"受保护"。
+
 ### 4.6 退出码（闭合集合）
 
 | 退出码 | 含义 | 触发 |

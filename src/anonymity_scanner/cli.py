@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import __version__, canonical, m2_classes
+from . import __version__, canonical, m2_classes, m3_search
 from .declaration import load_declaration, require_missing_policy
 from .exit_codes import (
     CriteriaError,
@@ -192,8 +192,49 @@ def _cmd_search(args):
         raise CriteriaError("搜索预算未指定", "search 需要 --budget <正整数>；没有预算就不是可复算的搜索")
     if args.budget <= 0:
         raise CriteriaError("搜索预算必须是正整数", repr(args.budget))
-    _echo_declarations(decl, table, policy, _resolve_root(args.root))
-    raise ModuleNotReady("M3（组合攻击面搜索）", "plan/03 §模块 M3 · 落地里程碑 M3")
+    root = _resolve_root(args.root)
+    _echo_declarations(decl, table, policy, root)
+
+    qi = [column.name for column in decl.qi_columns()]
+    sensitive = [column.name for column in decl.sensitive_columns()]
+    result = m3_search.search(
+        table, qi, sensitive, policy, args.k,
+        budget=args.budget, require_exhaustive=args.require_exhaustive,
+    )
+    outcome = m3_search.outcome_for(result)
+    document = {
+        "tool": PROG,
+        "version": __version__,
+        "command": "search",
+        "table": canonical.relativize(table.source, root),
+        "rows": table.row_count,
+        "columns": list(table.header),
+        "sensitive_columns": sensitive,
+        "missing_policy": policy,
+        "thresholds": {"k": args.k},
+        "search": result,
+        "outcome": outcome,
+        "exit_code": map_outcome(outcome),
+        "unparticipating": decl.unparticipating(),
+        "direct_identifier_warning": decl.direct_identifier_warning(),
+    }
+    out_dir = Path(args.out_dir)
+    canonical.write_json(out_dir / "search.json", document)
+    sys.stderr.write(
+        "search      : k=%r budget=%r pool=%d evaluated=%d pruned=%d completeness=%s sets=%d → %s (exit %d)\n"
+        % (
+            result["threshold"], result["budget"], result["candidate_count"],
+            result["evaluated_subsets"], result["pruned_subsets"], result["completeness"],
+            len(result["minimal_collapse_sets"]), outcome, document["exit_code"],
+        )
+    )
+    if result["non_exhaustive"]:
+        # `data/README.md` §4.5：非穷尽时结果不得称"最小崩塌集"。
+        sys.stderr.write(
+            "collapse    : %s（非穷尽结果，不是最小崩塌集；状态 %s）\n"
+            % (result["collapse_sets_status"], result["completeness"])
+        )
+    return outcome
 
 
 def _cmd_risk(args):
