@@ -34,18 +34,19 @@
 | **M2** | 等价类引擎：k / l / t、三种缺失策略、违例行号 | ✅ 2026-10-20 |
 | **M3** | 组合攻击面搜索：反单调剪枝、最小崩塌集、三态完整性 | ✅ 2026-10-20 |
 | **M4** | 逐记录风险与三种攻击者口径 | ✅ 2026-10-20 |
-| **M5** | gate + 判据文件：JSON + 人读报告 + 退出码 | ⬜ |
+| **M5** | gate + 判据文件：JSON + 人读报告 + 退出码 | ✅ 2026-10-20 |
 | **M6** | 发布：tag + Release + 留档 | ⬜ |
 
-> **当前进度：M0–M4 完成。** `scan` 已能算出真实结果：`<out-dir>/scan.json` 给出 k/l/t、类大小直方图、
-> 违例三件套（分组键 + 计数 + 行号）与未裁决行；`search` 给出 `<out-dir>/search.json`：崩塌边界集
-> （含 `[[]]`「一列都不能加」与 `no_solution`「无解」两种显式边界）、剪枝 / 预算计数、完整性三态
-> （`exhausted` / `budget-truncated` / `monotonicity-not-applicable`）与按 `|S|` 的分层曲线；
-> `risk` 给出 `<out-dir>/risk.json`：三种攻击者口径下的逐记录判定（行号 / 类 id / 类大小 / 是否命中），
-> `drop` 的未裁决行以 `participates: false` 显式列出，不会被静默抹掉。三条子命令都按 `0/1/2` 返回退出码，
-> 非穷尽结果不会被写成"最小"，空表 / 无参与行一律 `2`。
-> 其余计算实现（`schema` / `gate`）尚未落地——调用会明确返回 `MODULE_NOT_READY`
-> 与退出码 `2`（fail-closed），**不会**用空结果冒充通过。
+> **当前进度：M0–M5 完成。** `gate` 一条命令跑通：读**闭合**判据文件 → 调 M2（可选 M3）→
+> 产出 `<out-dir>/gate.json` + `<out-dir>/gate.md` + 真实退出码。
+> 报告首屏回显四项声明（角色 / 缺失策略 / 阈值 / 预算），每条违例给「分组键 + 计数 + 行号」；
+> 非穷尽搜索不会写成"最小崩塌集"。
+> `scan` / `search` / `risk` 分别给出 `scan.json` / `search.json` / `risk.json`：k/l/t、类大小直方图、
+> 崩塌边界集（含 `[[]]`「一列都不能加」与 `no_solution`「无解」）、剪枝 / 预算计数、完整性三态
+> （`exhausted` / `budget-truncated` / `monotonicity-not-applicable`）、逐记录攻击者判定。
+> 空表 / 无参与行 / 预算截断 + `require_exhaustive` 一律 `2`。
+> 仅计算实现 `schema`（M1）尚未落地——调用会明确返回 `MODULE_NOT_READY` 与退出码 `2`（fail-closed），
+> **不会**用空结果冒充通过。
 
 ## 安装
 
@@ -72,6 +73,29 @@ anonymity-scanner gate   --criteria <f> --out-dir <d> [--root <d>]
 ```
 
 `--missing-policy` 三选一，**无默认值**：`drop` / `single-column` / `separate-class`。
+
+## gate：判据文件驱动（可挂 CI）
+
+判据文件是**闭合**的：未知顶层键 / 未知 `thresholds`·`search` 键 / 非法 `l`·`t` 一律退出码 `2`。
+相对路径以**判据文件所在目录**为基准，所以判据可以整目录搬移。
+
+```json
+{
+  "table": "adult.csv",
+  "declaration": "declaration.json",
+  "missing_policy": "drop",
+  "thresholds": {"k": 5, "l": null, "t": null},
+  "search": {"enabled": true, "budget": 256, "require_exhaustive": true}
+}
+```
+
+```bash
+anonymity-scanner gate --criteria examples/adult/criteria.json --out-dir out/adult --root .
+```
+
+产物：`out/adult/gate.json`（机读）+ `out/adult/gate.md`（人读：首屏四项声明、违例三件套、
+完整性三态、退出码、可复算命令）。Adult 端到端实测摘要见
+[`examples/adult/EXPECTED.md`](examples/adult/EXPECTED.md)。
 
 ## 退出码
 

@@ -1,0 +1,7 @@
+{
+  "table": "adult.csv",
+  "declaration": "declaration.json",
+  "missing_policy": "drop",
+  "thresholds": {"k": 5, "l": null, "t": null},
+  "search": {"enabled": true, "budget": 256, "require_exhaustive": true}
+}

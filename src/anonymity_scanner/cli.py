@@ -5,15 +5,15 @@
 
 骨架期约定：五个子命令在**真正开始计算之前**完成全部输入校验，然后抛 `ModuleNotReady`（退出码 2）。
 这样"契约面"（参数形态、缺项、缺策略、坏表）现在就能被测试锁定，而计算面不会用空结果冒充通过。
+M2–M5 已落地；仅 `schema`（M1 计算实现）仍按 `MODULE_NOT_READY` fail-closed。
 """
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
-from . import __version__, canonical, m2_classes, m3_search, m4_risk
+from . import __version__, canonical, m2_classes, m3_search, m4_risk, m5_gate
 from .declaration import load_declaration, require_missing_policy
 from .exit_codes import (
     CriteriaError,
@@ -289,35 +289,11 @@ def _cmd_risk(args):
     return result["verdict"]
 
 
-def _load_criteria(path):
-    target = Path(path)
-    if not target.is_file():
-        raise CriteriaError("判据文件不存在", str(target))
-    try:
-        document = json.loads(target.read_text(encoding="utf-8-sig"))
-    except ValueError as exc:
-        raise CriteriaError("判据文件不是合法 JSON", str(exc))
-    if not isinstance(document, dict):
-        raise CriteriaError("判据文件顶层必须是对象")
-    for key in ("table", "declaration", "missing_policy", "thresholds"):
-        if key not in document:
-            raise CriteriaError("判据文件缺必填项", key)
-    require_missing_policy(document.get("missing_policy"))
-    thresholds = document["thresholds"]
-    if not isinstance(thresholds, dict):
-        raise CriteriaError("判据文件 thresholds 必须是对象")
-    if "k" not in thresholds:
-        raise CriteriaError("判据文件缺 thresholds.k", "k 门限是闸门的必要条件")
-    k = thresholds["k"]
-    if not isinstance(k, int) or isinstance(k, bool) or k <= 0:
-        raise CriteriaError("thresholds.k 必须是正整数", repr(k))
-    return document
-
-
 def _cmd_gate(args):
-    criteria = _load_criteria(args.criteria)
+    # 判据解析只有一处（m5_gate.load_criteria）——CLI 不再自己读 JSON。
+    criteria = m5_gate.load_criteria(args.criteria)
     # 判据里的相对路径以判据文件所在目录为基准解析——判据是政策输入，必须自包含、可搬移。
-    base = Path(args.criteria).resolve().parent
+    base = Path(criteria["base"])
     table_path = Path(criteria["table"])
     if not table_path.is_absolute():
         table_path = base / table_path
@@ -328,8 +304,36 @@ def _cmd_gate(args):
     decl = load_declaration(decl_path, table.header)
     if not decl.qi_columns():
         raise DeclarationError("未声明任何 qi 列，无法分组", "判据文件引用的声明里没有任何 qi 列")
-    _echo_declarations(decl, table, criteria["missing_policy"], _resolve_root(args.root))
-    raise ModuleNotReady("M5（可复算 gate）", "plan/03 §模块 M5 · 落地里程碑 M5")
+    root = _resolve_root(args.root)
+    _echo_declarations(decl, table, criteria["missing_policy"], root)
+
+    document = m5_gate.evaluate(
+        table,
+        decl,
+        criteria,
+        table_label=canonical.relativize(table.source, root),
+        criteria_label=canonical.relativize(Path(args.criteria).resolve(), root),
+    )
+    out_dir = Path(args.out_dir)
+    canonical.write_json(out_dir / "gate.json", document)
+    canonical.write_text_atomic(out_dir / "gate.md", m5_gate.render_markdown(document))
+    sys.stderr.write(
+        "gate        : policy=%s k=%r l=%r t=%r search=%s violations=%d → %s (exit %d)\n"
+        % (
+            document["declarations"]["missing_policy"],
+            document["declarations"]["thresholds"]["k"],
+            document["declarations"]["thresholds"]["l"],
+            document["declarations"]["thresholds"]["t"],
+            document["declarations"]["search"]["enabled"],
+            len(document["violations"]),
+            document["outcome"], document["exit_code"],
+        )
+    )
+    if document["undefined_reason"] is not None:
+        sys.stderr.write(
+            "gate        : undefined_reason=%s（无法裁决，不是通过）\n" % document["undefined_reason"]
+        )
+    return document["outcome"]
 
 
 _HANDLERS = {

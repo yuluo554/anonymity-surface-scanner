@@ -1,0 +1,8 @@
+{
+  "columns": {
+    "age": {"role": "qi"},
+    "education": {"role": "qi"},
+    "sex": {"role": "qi"},
+    "income": {"role": "sensitive"}
+  }
+}

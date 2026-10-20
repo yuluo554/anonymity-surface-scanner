@@ -4,8 +4,8 @@
 
 - **项目**：匿名性攻击面搜索器（Anonymity Surface Scanner）——纯本地 Python CLI
 - **性质**：不参赛项目题 · 发布 GitHub **公开仓库** · 署名 `yuluo554`
-- **版本**：v1（2026-10-20 定稿；需求侧、竞品与开源检索基准日 **2026-10-20**）；当前提交 = M4 收尾（逐记录风险落地）
-- **当前状态**：**M4 完成**（逐记录风险：`prosecutor` / `journalist` / `marketer` 三口径；`risk` 已产出 `risk.json` 并返回真实退出码）。M0–M1 已交付骨架与独立真值夹具，M2 已交付等价类引擎，M3 已交付组合搜索；计算实现 M1（`schema`）与 M5（`gate`）仍未落地，两条子命令一律 `MODULE_NOT_READY` + 退出码 `2`（fail-closed，不伪造结果）。
+- **版本**：v1（2026-10-20 定稿；需求侧、竞品与开源检索基准日 **2026-10-20**）；当前提交 = M5 收尾（可复算 gate 落地）
+- **当前状态**：**M5 完成**（`gate` 读闭合判据文件 → 调 M2（可选 M3）→ 产出 `gate.json` + `gate.md` + 真实退出码；`pass` / `violation` / `undecidable` 三态各有用例；Adult 端到端已实跑回填）。M0–M1 已交付骨架与独立真值夹具，M2 已交付等价类引擎，M3 已交付组合搜索，M4 已交付逐记录风险；仅计算实现 M1（`schema`）仍未落地，该子命令一律 `MODULE_NOT_READY` + 退出码 `2`（fail-closed，不伪造结果）。
 - **一句话定位**：k/l/t 公式是商品，**没人回答"哪几列组合会让 k 崩塌"**——本工具输入一张表 + 列角色声明，输出最小 k、**最小崩塌集**、每处违例的等价类与行号清单（可手算复核）、以及可挂 CI 的 gate 结论。搜索层是护城河，不是公式层。
 - **交付形态**：**纯本地 Python CLI**（唯一形态，不设备选）。无 GPU、无云、无网络调用、无需真实敏感数据。
 - **撞域切割**：同系列既有题材分别在**制度与流程层**（产检查清单、评制度）与**文本条款层**（读文档、标风险条款）作业；本题是**数据层的可计算量**——输入数据行，产出数值、行号与列组合（方向级描述，具体领域按品牌隔离纪律不展开）。
@@ -22,22 +22,23 @@
 | `plan/04-数据计划.md` | 夹具清单、真值结构、植入纪律、Adult 演示数据计划 | ✅ M0 |
 | `plan/05-里程碑与发布.md` | 逐里程碑 DoD、状态表、风险登记、发布路径 | ✅ M0 |
 | `plan/06-交付对标与决策.md` | 评分对标、里程碑覆盖对标、未闭合项 | ✅ M0 |
-| `src/` | CLI 与 M1–M5 实现（当前：CLI 契约 + 序列化 + 退出码映射 + **M2 等价类引擎** + **M3 组合搜索** + **M4 逐记录风险**） | ✅ M4 |
+| `src/` | CLI 与 M1–M5 实现（当前：CLI 契约 + 序列化 + 退出码映射 + **M2 等价类引擎** + **M3 组合搜索** + **M4 逐记录风险** + **M5 可复算 gate**） | ✅ M5 |
 | `data/fixtures/` | 程序化植入已知违例的合成夹具 + 独立 oracle 真值 + `manifest.json` | ✅ M1 |
 | `tools/gen_fixtures.py` | 夹具生成器（splitmix64 固定种子；`--check` / `--only`；不 import 生产模块） | ✅ M1 |
 | `tools/fixture_oracle.py` | 独立朴素 oracle（复算真值；与被测实现互不 import） | ✅ M1 |
 | `tools/adult_baseline.py` | UCI Adult 读入基线（只读本地、不联网；未取得时退出码 3） | ✅ M1 |
-| `examples/adult/` | UCI Adult 端到端演示（脚本 + 判据 + 实测摘要） | ⬜ M5 |
-| `README.md`（仓库根） | 面向使用者的产品页（首屏含定位宣言与撞域切割） | 🟡 M0（首屏 + 状态行；命令示例待 M5 实跑回填） |
+| `examples/adult/` | UCI Adult 端到端演示（`run.sh` + `prepare.py` + 判据 + `EXPECTED.md` 实测摘要） | ✅ M5 |
+| `README.md`（仓库根） | 面向使用者的产品页（首屏含定位宣言与撞域切割） | ✅ M5（首屏 + 状态行 + 命令示例已实跑回填） |
 | `plan/RELEASE-M6.md` | 发布留档（tag 前入库；tag 后追加事实分栏） | ⬜ M6 |
 | `plan/HANDOFF-M1.md` | 第 1 棒启动包（七节；M0 收尾时写） | ✅ M0 |
 | `plan/HANDOFF-M2.md` | 第 2 棒启动包（七节；M1 收尾时写） | ✅ M1 |
 | `plan/HANDOFF-M3.md` | 第 3 棒启动包（七节；M2 收尾时写） | ✅ M2 |
 | `plan/HANDOFF-M4.md` | 第 4 棒启动包（七节；M3 收尾时写） | ✅ M3 |
 | `plan/HANDOFF-M5.md` | 第 5 棒启动包（七节；M4 收尾时写） | ✅ M4 |
+| `plan/HANDOFF-M6.md` | 第 6 棒启动包（七节；M5 收尾时写） | ✅ M5 |
 | `AGENTS.md` | 仓库锚点：方法论装订、布局门命令、强制布局清单、变异验证 | ✅ M0 |
 | `pyproject.toml` / `src/anonymity_scanner/` | 打包与骨架（CLI 契约 / 确定性序列化 / 退出码映射） | 🟡 M0 |
-| `tests/` | 契约 / 确定性 / 输入校验 / 夹具验收 / M2 等价类 / M3 组合搜索 / M4 逐记录风险测试（227 项，双解释器全绿；干净 clone（无 `*.csv`）→ 155 passed + 72 skipped） | ✅ M4 |
+| `tests/` | 契约 / 确定性 / 输入校验 / 夹具验收 / M2 等价类 / M3 组合搜索 / M4 逐记录风险 / M5 gate 测试（277 项，双解释器全绿；干净 clone（无 `*.csv`）→ 205 passed + 72 skipped） | ✅ M5 |
 | `tools/check_sprint_layout.py` | 布局门（8 条判据） | ✅ M0 |
 | `tools/verify_layout_gate.py` | 布局门变异验证（10 组，逐组必须变红） | ✅ M0 |
 | `tools/scaffold_selftest.py` | 口径单点自检（版本 / 依赖 / 退出码 / 序列化） | ✅ M0 |
@@ -46,7 +47,7 @@
 
 > **交接单规则**：`plan/HANDOFF-M<k>.md` = **第 k 棒的启动包**，由第 k−1 棒收尾时写（七节：当前进度 / 当前事实·状态不变量 / 待办 / 既定口径 K 编号 / 环境坑 / DoD 逐项 / 命令速查）。
 > 布局门对每个 ✅ 里程碑断言同名交接单存在且节齐。M0 已声明豁免（其收尾记录即本套件与 `plan/05` §二）。
-> 当前：`plan/HANDOFF-M1.md`（随 M0）、`plan/HANDOFF-M2.md`（随 M1）、`plan/HANDOFF-M3.md`（随 M2）、`plan/HANDOFF-M4.md`（随 M3）与 `plan/HANDOFF-M5.md`（随 M4）均已落盘。
+> 当前：`plan/HANDOFF-M1.md`（随 M0）、`plan/HANDOFF-M2.md`（随 M1）、`plan/HANDOFF-M3.md`（随 M2）、`plan/HANDOFF-M4.md`（随 M3）、`plan/HANDOFF-M5.md`（随 M4）与 `plan/HANDOFF-M6.md`（随 M5）均已落盘。
 
 ## 二、决策记录
 
@@ -97,7 +98,7 @@
 | P5 | 竞品没有任何一个做 QI 组合搜索 | 12 项能力矩阵（arx / sdcMicro / SDV / faker / diffprivlib / OpenDP / anonymeter / pycanon / piiscope / SDMetrics / SACRO-ML / prv_accountant） | ✅ 实测；**推断部分 ⬜ 软论据** |
 | P6 | 组合搜索层开源空白 | 5 个检索式 `total_count = 0`（`quasi identifier discovery` / `minimal quasi-identifier` / `k-anonymity violation` / `attribute combination re-identification scan` / `anonymization linter`） | ⬜ 软论据（检索快照可回溯，未逐条截图） |
 | P7 | "CLI + 门禁"形态有人认，但"猜列名"不成立 | piiscope 2★、2026-10-11、`_QI_NAME_HINTS` 硬编码、PyPI 月下载 58 | ✅ 实测 |
-| P8 | 本工具能跑出可手算复核的违例清单 | M2：`scan.json` 的违例三件套在 tiny 上逐条可手算（`tests/test_m2_classes.py`）；人读报告属 M5 | ✅ M2（JSON）/ ⬜ M5（人读） |
+| P8 | 本工具能跑出可手算复核的违例清单 | M2：`scan.json` 的违例三件套在 tiny 上逐条可手算（`tests/test_m2_classes.py`）；人读报告在 `gate.md`（`tests/test_m5_gate.py`） | ✅ M2（JSON）/ ✅ M5（人读） |
 | P9 | 最小崩塌集在植入真值夹具上逐项命中 | M3：四组夹具的 `search` / `minimal_collapse_sets` 与独立 oracle 真值逐项一致（`tests/test_m3_search.py`）；三种场景（默认 / 空集 / 无解）逐组断言 | ✅ M3 |
 | P10 | 发布形态（公开仓 + tag + Release + 留档） | 未发布 | ⬜ M6 |
 | P11 | Reddit 侧需求原话 | 直连超时、pullpush 限流 | ❌ 未取得（不作论据） |
@@ -111,7 +112,7 @@
 | **M2** | 等价类引擎（M2 模块）：k / l / t、三种缺失策略、违例行号 | 三策略各有用例；sdcMicro #363 型坑有专门测试；边界表有定义行为 | ✅ 2026-10-20 |
 | **M3** | 组合搜索（M3 模块）：反单调剪枝、最小崩塌集、崩塌曲线、三态完整性 | 真值夹具逐项命中；预算截断不冒充穷尽；剪枝条件被测试锁定 | ✅ 2026-10-20 |
 | **M4** | 逐记录风险与三种攻击者口径 | 三口径文档化并被测试引用；唯一记录行号与真值一致 | ✅ 2026-10-20 |
-| **M5** | gate + 判据文件：JSON 结果 + 人类可读报告 + 退出码 | 改阈值只改判据；退出码 `0/1/2` 正确；可直接挂 CI | ⬜ |
+| **M5** | gate + 判据文件：JSON 结果 + 人类可读报告 + 退出码 | 改阈值只改判据；退出码 `0/1/2` 正确；可直接挂 CI | ✅ 2026-10-20 |
 | **M6** | 发布 | **DoD = git tag + GitHub Release（附产物）+ 发布留档三件套**；公开仓可 `pip install` 后一条命令跑通；`plan/RELEASE-M6.md` 落库 | ⬜ |
 
 > **里程碑纪律**：M1 必须先于代码——没有植入真值的夹具，M2/M3 的"命中"无从判定。M6 之前不改写 `plan/01`。

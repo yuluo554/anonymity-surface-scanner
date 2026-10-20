@@ -339,11 +339,106 @@ def test_gate_rejects_invalid_k_threshold(capsys, tmp_path, table, decl, k):
     assert "thresholds.k" in capsys.readouterr().err
 
 
-def test_gate_valid_criteria_is_module_not_ready(capsys, tmp_path, table, decl):
+def test_gate_with_valid_criteria_computes(capsys, tmp_path, table, decl):
+    """M5 落地后：有效判据必须真的算出结果（不再 MODULE_NOT_READY），两份产物按契约落盘。"""
     path = _criteria(tmp_path, table, decl)
     code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    captured = capsys.readouterr()
+    assert "MODULE_NOT_READY" not in captured.err
+    assert code == VIOLATION, "三行两列 QI 全是单例类 → k=1 < 2，退出码必须是有违例（1）"
+    document = json.loads((tmp_path / "out" / "gate.json").read_text(encoding="utf-8"))
+    assert document["command"] == "gate"
+    assert document["scan"]["k_l_t"]["k"] == 1
+    assert len(document["violations"]) == 3
+    assert document["outcome"] == "violation"
+    assert document["exit_code"] == VIOLATION
+    markdown = (tmp_path / "out" / "gate.md").read_text(encoding="utf-8")
+    assert markdown.startswith("# anonymity-scanner gate")
+    assert "缺失策略" in markdown and "阈值" in markdown and "预算" in markdown
+
+
+# ── 判据文件闭合：未知键 / 非法 l·t / 坏 search 块 → 2 ────────────────────
+
+def test_gate_rejects_unknown_top_level_key(capsys, tmp_path, table, decl):
+    path = _criteria(tmp_path, table, decl, attacker="journalist")
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
     assert code == UNDECIDABLE
-    assert "M5" in capsys.readouterr().err
+    captured = capsys.readouterr()
+    assert "未知顶层键" in captured.err and "attacker" in captured.err
+    assert not (tmp_path / "out").exists(), "判据无效时不得写出任何产物"
+
+
+def test_gate_rejects_unknown_threshold_key(capsys, tmp_path, table, decl):
+    path = _criteria(tmp_path, table, decl, thresholds={"k": 2, "delta": 0.1})
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "thresholds 有未知键" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("l_value", [0, -1, "2", 2.5, True])
+def test_gate_rejects_invalid_l_threshold(capsys, tmp_path, table, decl, l_value):
+    path = _criteria(tmp_path, table, decl, thresholds={"k": 2, "l": l_value, "t": None})
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "thresholds.l" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("t_value", [-0.1, 1.5, "0.5", True, [0.5]])
+def test_gate_rejects_invalid_t_threshold(capsys, tmp_path, table, decl, t_value):
+    path = _criteria(tmp_path, table, decl, thresholds={"k": 2, "l": None, "t": t_value})
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "thresholds.t" in capsys.readouterr().err
+
+
+def test_gate_rejects_unknown_search_key(capsys, tmp_path, table, decl):
+    path = _criteria(tmp_path, table, decl, search={"enabled": False, "budget": 10, "depth": 3})
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "search 有未知键" in capsys.readouterr().err
+
+
+def test_gate_requires_budget_when_search_enabled(capsys, tmp_path, table, decl):
+    path = _criteria(tmp_path, table, decl, search={"enabled": True})
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "search.budget" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("budget", [0, -5, "10", True])
+def test_gate_rejects_invalid_search_budget(capsys, tmp_path, table, decl, budget):
+    path = _criteria(tmp_path, table, decl, search={"enabled": True, "budget": budget})
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "search.budget" in capsys.readouterr().err
+
+
+def test_gate_rejects_non_bool_search_flags(capsys, tmp_path, table, decl):
+    path = _criteria(
+        tmp_path, table, decl,
+        search={"enabled": "yes", "budget": 10, "require_exhaustive": False},
+    )
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "search.enabled" in capsys.readouterr().err
+
+
+def test_gate_rejects_require_exhaustive_without_search(capsys, tmp_path, table, decl):
+    path = _criteria(
+        tmp_path, table, decl,
+        search={"enabled": False, "require_exhaustive": True},
+    )
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "require_exhaustive" in capsys.readouterr().err
+
+
+def test_gate_l_threshold_requires_sensitive_column(capsys, tmp_path, table):
+    only_qi = write_decl(tmp_path, {"age": {"role": "qi"}, "zip": {"role": "qi"}})
+    path = _criteria(tmp_path, table, only_qi, thresholds={"k": 2, "l": 2, "t": None})
+    code = main(["gate", "--criteria", str(path), "--out-dir", str(tmp_path / "out")])
+    assert code == UNDECIDABLE
+    assert "sensitive" in capsys.readouterr().err
 
 
 # ── 安装形态：入口函数在**未安装**的树里也要能跑 ──────────────────────────
