@@ -96,16 +96,14 @@
 
 | 项 | 实测 |
 | --- | --- |
-| 首次 push | `main` → `eeda0cd`；tag `v0.1.0` → `eeda0cd`（两个 push 事件） |
-| run（`main`） | `39436441311` · success · <https://github.com/yuluo554/anonymity-surface-scanner/actions/runs/39436441311> |
-| run（tag） | `39436117872` · success · <https://github.com/yuluo554/anonymity-surface-scanner/actions/runs/39436117872> |
-| run（收尾提交 `8f4f895`） | `39437106544` · success · <https://github.com/yuluo554/anonymity-surface-scanner/actions/runs/39437106544> |
+| 对账不变式 | 每个 push 到 `main` / `v*` 的事件各产生一条 run，且该 run 的 `head_sha` = 该事件 sha；台账只登记**发布相关**的 sha，不登记会自追的总数 |
+| sha 台账 | `eeda0cd`（tag 与发布提交）→ run `39436441311` success；tag `v0.1.0` → run `39436117872` success；`8f4f895`（收尾）→ `39437106544` success；`275a507`（留档补记）→ `39437349233` success |
 | 矩阵 | 每个 run 4 个 job：`py3.8 · ubuntu-22.04` / `py3.8 · windows-latest` / `py3.12 · ubuntu-22.04` / `py3.12 · windows-latest`，**全部 success** |
 | 步骤 | 布局门 → 变异验证（10/10）→ selftest → `pytest` → `anonymity-scanner --version` |
 | 结论 | 首推即绿，无修复轮次；3.9–3.11 仍不作承诺 |
 
-> 另有一次 `200c1c5`（M1 时点的 `main`）触发的 run `39436118278` 亦为 success——那是快进前的旧 `main`，
-> 不代表发布提交；发布提交的对账以上表两个 run 为准。
+> 另有一次 `200c1c5`（快进前停在 M1 的旧 `main`）触发的 run `39436118278` 亦为 success；
+> 它不代表发布提交，只作"CI 本身可用"的旁证。
 
 ### 4. tag 后作用域
 
