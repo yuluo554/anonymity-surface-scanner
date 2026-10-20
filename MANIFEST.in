@@ -1,0 +1,7 @@
+include LICENSE
+include README.md
+include AGENTS.md
+include pyproject.toml
+include data/README.md
+include plan/*.md
+recursive-include tools *.py

@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anonymity-scanner"
+description = "Find which column combinations collapse k-anonymity: minimal collapse sets, equivalence classes, recomputable gate."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [{name = "yuluo554"}]
+keywords = ["k-anonymity", "quasi-identifier", "statistical disclosure control", "privacy", "cli"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Console",
+  "Topic :: Security",
+]
+dynamic = ["version"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+anonymity-scanner = "anonymity_scanner.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/yuluo554/anonymity-surface-scanner"
+
+[tool.setuptools.dynamic]
+version = {attr = "anonymity_scanner.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
