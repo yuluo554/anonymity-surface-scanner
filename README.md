@@ -33,16 +33,18 @@
 | **M1** | 数据先行：植入已知违例的合成夹具 + 独立真值 + Adult 基线 | ✅ 2026-10-20 |
 | **M2** | 等价类引擎：k / l / t、三种缺失策略、违例行号 | ✅ 2026-10-20 |
 | **M3** | 组合攻击面搜索：反单调剪枝、最小崩塌集、三态完整性 | ✅ 2026-10-20 |
-| **M4** | 逐记录风险与三种攻击者口径 | ⬜ |
+| **M4** | 逐记录风险与三种攻击者口径 | ✅ 2026-10-20 |
 | **M5** | gate + 判据文件：JSON + 人读报告 + 退出码 | ⬜ |
 | **M6** | 发布：tag + Release + 留档 | ⬜ |
 
-> **当前进度：M0–M3 完成。** `scan` 已能算出真实结果：`<out-dir>/scan.json` 给出 k/l/t、类大小直方图、
+> **当前进度：M0–M4 完成。** `scan` 已能算出真实结果：`<out-dir>/scan.json` 给出 k/l/t、类大小直方图、
 > 违例三件套（分组键 + 计数 + 行号）与未裁决行；`search` 给出 `<out-dir>/search.json`：崩塌边界集
 > （含 `[[]]`「一列都不能加」与 `no_solution`「无解」两种显式边界）、剪枝 / 预算计数、完整性三态
-> （`exhausted` / `budget-truncated` / `monotonicity-not-applicable`）与按 `|S|` 的分层曲线。
-> 两者都按 `0/1/2` 返回退出码，非穷尽结果不会被写成"最小"。
-> 其余计算实现（`schema` / `risk` / `gate`）尚未落地——调用会明确返回 `MODULE_NOT_READY`
+> （`exhausted` / `budget-truncated` / `monotonicity-not-applicable`）与按 `|S|` 的分层曲线；
+> `risk` 给出 `<out-dir>/risk.json`：三种攻击者口径下的逐记录判定（行号 / 类 id / 类大小 / 是否命中），
+> `drop` 的未裁决行以 `participates: false` 显式列出，不会被静默抹掉。三条子命令都按 `0/1/2` 返回退出码，
+> 非穷尽结果不会被写成"最小"，空表 / 无参与行一律 `2`。
+> 其余计算实现（`schema` / `gate`）尚未落地——调用会明确返回 `MODULE_NOT_READY`
 > 与退出码 `2`（fail-closed），**不会**用空结果冒充通过。
 
 ## 安装

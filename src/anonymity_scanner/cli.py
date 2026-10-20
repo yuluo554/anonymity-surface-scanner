@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import __version__, canonical, m2_classes, m3_search
+from . import __version__, canonical, m2_classes, m3_search, m4_risk
 from .declaration import load_declaration, require_missing_policy
 from .exit_codes import (
     CriteriaError,
@@ -240,13 +240,53 @@ def _cmd_search(args):
 def _cmd_risk(args):
     table, decl = _prepare(args)
     policy = require_missing_policy(args.missing_policy)
-    allowed = ("prosecutor", "journalist", "marketer")
+    allowed = m4_risk.ATTACKERS
     if args.attacker is None:
         raise CriteriaError("攻击者模型未指定", "risk 需要 --attacker（%s 之一）" % " / ".join(allowed))
     if args.attacker not in allowed:
         raise CriteriaError("未知的攻击者模型", "%r（可选 %s）" % (args.attacker, " / ".join(allowed)))
-    _echo_declarations(decl, table, policy, _resolve_root(args.root))
-    raise ModuleNotReady("M4（逐记录风险）", "plan/03 §模块 M4 · 落地里程碑 M4")
+    root = _resolve_root(args.root)
+    _echo_declarations(decl, table, policy, root)
+
+    qi = [column.name for column in decl.qi_columns()]
+    sensitive = [column.name for column in decl.sensitive_columns()]
+    result = m4_risk.risk(table, qi, policy, args.attacker)
+    document = {
+        "tool": PROG,
+        "version": __version__,
+        "command": "risk",
+        "table": canonical.relativize(table.source, root),
+        "rows": table.row_count,
+        "columns": list(table.header),
+        "qi_columns": qi,
+        "sensitive_columns": sensitive,
+        "missing_policy": policy,
+        "attacker": result["attacker"],
+        "threshold": result["threshold"],
+        "rule": result["rule"],
+        "class_count": result["class_count"],
+        "records": result["records"],
+        "flagged_rows": result["flagged_rows"],
+        "by_class_size": result["by_class_size"],
+        "unparticipating": decl.unparticipating(),
+        "direct_identifier_warning": decl.direct_identifier_warning(),
+        "undefined_reason": result["undefined_reason"],
+        "verdict": result["verdict"],
+        "exit_code": map_outcome(result["verdict"]),
+    }
+    out_dir = Path(args.out_dir)
+    canonical.write_json(out_dir / "risk.json", document)
+    sys.stderr.write(
+        "risk        : attacker=%s rule=%s classes=%d flagged=%d/%d → %s (exit %d)\n"
+        % (
+            result["attacker"], result["rule"], result["class_count"],
+            len(result["flagged_rows"]), table.row_count,
+            result["verdict"], document["exit_code"],
+        )
+    )
+    if result["undefined_reason"] is not None:
+        sys.stderr.write("risk        : undefined_reason=%s（无法裁决，不是通过）\n" % result["undefined_reason"])
+    return result["verdict"]
 
 
 def _load_criteria(path):

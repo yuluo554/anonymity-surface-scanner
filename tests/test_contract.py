@@ -181,6 +181,25 @@ def test_search_with_valid_arguments_computes(capsys, table, decl, tmp_path):
     assert document["exit_code"] == VIOLATION
 
 
+def test_risk_requires_attacker(capsys, table, decl, tmp_path):
+    code = main([
+        "risk", "--table", str(table), "--decl", str(decl),
+        "--missing-policy", "drop", "--out-dir", str(tmp_path / "out"),
+    ])
+    assert code == UNDECIDABLE
+    assert "攻击者模型未指定" in capsys.readouterr().err
+    assert not (tmp_path / "out").exists(), "缺参数时不得写出任何产物"
+
+
+def test_risk_requires_missing_policy(capsys, table, decl, tmp_path):
+    code = main([
+        "risk", "--table", str(table), "--decl", str(decl),
+        "--attacker", "journalist", "--out-dir", str(tmp_path / "out"),
+    ])
+    assert code == UNDECIDABLE
+    assert "缺失值策略未指定" in capsys.readouterr().err
+
+
 def test_risk_rejects_unknown_attacker(capsys, table, decl, tmp_path):
     code = main([
         "risk", "--table", str(table), "--decl", str(decl),
@@ -191,14 +210,25 @@ def test_risk_rejects_unknown_attacker(capsys, table, decl, tmp_path):
     assert "攻击者模型" in capsys.readouterr().err
 
 
-def test_risk_with_valid_arguments_is_module_not_ready(capsys, table, decl, tmp_path):
+def test_risk_with_valid_arguments_computes(capsys, table, decl, tmp_path):
+    """M4 落地后：有效参数必须真的算出结果（不再 MODULE_NOT_READY），且产物按契约落盘。"""
     code = main([
         "risk", "--table", str(table), "--decl", str(decl),
         "--missing-policy", "separate-class", "--attacker", "journalist",
         "--out-dir", str(tmp_path / "out"),
     ])
-    assert code == UNDECIDABLE
-    assert "M4" in capsys.readouterr().err
+    captured = capsys.readouterr()
+    assert "MODULE_NOT_READY" not in captured.err
+    assert code == VIOLATION, "三行的 (age, zip) 各不相同 → 3 个 size=1 的类，journalist 命中"
+    document = json.loads((tmp_path / "out" / "risk.json").read_text(encoding="utf-8"))
+    assert document["command"] == "risk"
+    assert document["attacker"] == "journalist"
+    assert document["threshold"] == 2
+    assert document["rule"] == "class_size <= 2"
+    assert document["flagged_rows"] == [1, 2, 3]
+    assert [record["row_number"] for record in document["records"]] == [1, 2, 3]
+    assert document["verdict"] == "violation"
+    assert document["exit_code"] == VIOLATION
 
 
 # ── 输入校验：坏表 / 坏声明 → 2 ───────────────────────────────────────────
