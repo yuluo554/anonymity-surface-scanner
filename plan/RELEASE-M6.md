@@ -96,8 +96,9 @@
 
 | 项 | 实测 |
 | --- | --- |
-| 对账不变式 | 每个 push 到 `main` / `v*` 的事件各产生一条 run，且该 run 的 `head_sha` = 该事件 sha；台账只登记**发布相关**的 sha，不登记会自追的总数 |
-| sha 台账 | `eeda0cd`（tag 与发布提交）→ run `39436441311` success；tag `v0.1.0` → run `39436117872` success；`8f4f895`（收尾）→ `39437106544` success；`275a507`（留档补记）→ `39437349233` success |
+| 对账不变式 | 每个 push 到 `main` / `v*` 的事件各产生一条 run，且该 run 的 `head_sha` = 该事件 sha |
+| sha 台账 | `eeda0cd`（tag 与发布提交）→ run `39436441311` success；tag `v0.1.0` → run `39436117872` success；`8f4f895`（收尾）→ `39437106544` success；`275a507` → `39437349233` success；`111b230` → `39437685335` success |
+| 台账快照纪律 | 台账为**快照式**：登记到 `111b230` 为止；其后纯文档提交不再追加（否则每改一次台账就多一个 sha，追不完）。判断"是否仍绿"看 GitHub 上该 sha 的 run，不看本表行数 |
 | 矩阵 | 每个 run 4 个 job：`py3.8 · ubuntu-22.04` / `py3.8 · windows-latest` / `py3.12 · ubuntu-22.04` / `py3.12 · windows-latest`，**全部 success** |
 | 步骤 | 布局门 → 变异验证（10/10）→ selftest → `pytest` → `anonymity-scanner --version` |
 | 结论 | 首推即绿，无修复轮次；3.9–3.11 仍不作承诺 |
