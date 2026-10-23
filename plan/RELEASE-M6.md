@@ -184,41 +184,47 @@
 
 ### 4. tag、Release 与三方 digest
 
-| 项 | v0.1.1 实测 |
+> **本节只写不变量与方法，不写本版附件的字面摘要。** 原因：本文件随 sdist 一起发布，
+> 在文件里写"本包自己的 sha256"必然自相矛盾（写死的值一旦重打包就假）。字面摘要落在
+> **Release 正文 / tag 消息 / `SHA256SUMS` 附件**三处，三处必须同值。
+
+| 项 | v0.1.1 |
 | --- | --- |
-| tag | `v0.1.1`（annotated），指向 `4e1764c`（`M6.1：v0.1.1 —— …`） |
+| tag | `v0.1.1`（annotated）；指向见 `git rev-parse v0.1.1^{commit}`（tag 消息里记了提交与摘要） |
 | Release | <https://github.com/yuluo554/anonymity-surface-scanner/releases/tag/v0.1.1>（非 draft、非 prerelease、`latest`） |
-| 附件 ① | `anonymity_scanner-0.1.1.tar.gz`（`236922` B）sha256 `9d16eb094a25a1afa6a463e3c038430d951bbab34f8350a32a2148151f240e5e` |
-| 附件 ② | `SHA256SUMS`（`97` B）sha256 `2fea46b4563868ebac1b997d5aec19eadd6d8433066fd903ad6f1fc0637d6fbc` |
-| ① 重建件（`git archive v0.1.1` → `python -m build --sdist`） | `9d16eb09…40e5e` |
-| ② 回下载件（`gh release download v0.1.1`） | `9d16eb09…40e5e`（与 ① 逐字符相同） |
-| ③ GitHub 侧 digest | `sha256:9d16eb09…40e5e`（与 ①② 逐字符相同） |
-| `sha256sum -c SHA256SUMS`（回下载件） | **OK** |
-| 回下载件跑它自带的测试（只装 `pytest` 的新 venv，不装包） | **222 passed, 73 skipped**，exit `0` |
-| 包内表格 | `tar tzf | grep -E '\.csv|\.data$|\.names'` → 无命中（rc=1） |
-| 包条目数 | 83 |
+| 附件 | `anonymity_scanner-0.1.1.tar.gz`（sdist）+ `SHA256SUMS` |
+| 三方对撞方法 | ① `git archive <tag>` → `python -m build --sdist`；② `gh release download <tag>`；③ `gh api …/releases/tags/<tag>` 的 `assets[].digest`。**① 与 ②③ 必须逐字符相同** |
+| `SHA256SUMS` 格式 | 两个空格 + 单 LF（无 `*`）。`sha256sum` 默认的 `*` 形式在 Windows CRLF 下会与 `sha256sum -c` 互相绊倒 |
+| 回下载件自证 | 解包 → **只装 `pytest`** 的新 venv（不装包）→ `pytest` 必须 exit `0` |
+| 包内表格 | `tar tzf | grep -E '\.csv|\.data$|\.names'` 必须无命中 |
 
-> **注**：`SHA256SUMS` 用**两个空格 + 单 LF**（无 `*`）。写成 `sha256sum` 默认的 `*` 形式会与
-> `sha256sum -c` 在 Windows 的 CRLF 下互相绊倒；已实测通过。
+**本轮实测结果（2026-10-23，执行时点）**：三方 digest 逐字符相同；`sha256sum -c SHA256SUMS` = OK；
+回下载件跑它自带测试 = **222 passed, 73 skipped / exit 0**；包内表格 0；包条目 83。
+字面值见该 tag 的 Release 正文与 tag 消息。
 
-### 5. CI 实测（本轮两轮，各 3 job 全绿）
+### 5. CI 实测
 
-| run | 事件 | head | 结论 |
-| --- | --- | --- | --- |
-| `39897683566` | push → `main` | `4e1764c` | success（`py3.12 · ubuntu-22.04` / `py3.12 · windows-latest` / `sdist self-contained · py3.12`） |
-| `39897787880` | push → tag `v0.1.1` | `4e1764c` | success（同上 3 job） |
+| run | 事件 | 结论 |
+| --- | --- | --- |
+| `39897683566` | push → `main` | success（3 job） |
+| `39898099955` | push → `main`（tag 后回填） | success（3 job） |
+| tag `v0.1.1` 的 push run | push → tag | success（3 job）；run id 见 `gh run list --branch v0.1.1` |
 
-check-run 注解数：**0**。`packaging` job 的六步（build sdist → 无表格扫描 → 解包跑自带 pytest →
-真值自检 → 布局门）全部 `✓`。
+check-run 注解数：**0**。三个 job = `py3.12 · ubuntu-22.04` / `py3.12 · windows-latest` /
+`sdist self-contained · py3.12`。`packaging` job 的六步（build sdist → 无表格扫描 →
+解包跑自带 pytest → 真值自检 → 布局门）全部 `✓`。
 
-### 6. 仍未闭合（如实登记）
+### 6. 已知边界（v0.1.1 结束时点）
 
-- **tag 树里的 README 在 `v0.1.1` 上仍写「待发布」**：`4e1764c` 是发布提交，写「v0.1.1 待发布」是对的；
-  「已发布」是 tag 之后才成立的事实 → 按本仓两栏纪律，它只能写在 **tag 后**（本节）。
-  README 与 `plan/00` 已在 tag 之后改成「已发布」，属 `POST_TAG_SCOPE`（纯文档）。**不重指 tag。**
+- **`v0.1.1` 的 tag 曾从 `4e1764c` 重指到其后一个纯文档提交**：`4e1764c` 的 README 写「v0.1.1 待发布」，
+  而那棵树就是发布物 —— 与诊断 D2 给 `v0.1.0` 定 P1 的判据同形。处置 = 把 tag 移到"已回填 ✅"的提交
+  （`POST_TAG_SCOPE` 只含 `README.md` / `plan/00` / `plan/05` / `plan/RELEASE-M6.md`，
+  `DELIVERABLE_UNCHANGED` = `src/` `pyproject.toml` `MANIFEST.in` `.github/` `tests/` 零差异），
+  并按 §三.4 的方法重打附件。`v0.1.0` 的 tag 与 Release 未动。
 - `plan/05` §「发布路径」里仍写 `v0.1.0` 的具体命令；它记录的是 M6 当轮路径，不逐个版本复制。
 - `v0.1.0` 的坏 sdist **保留在架**（DEC1-A）；其 Release 正文未加"已知问题"提示 —— 由本项目
   的 README 与 v0.1.1 正文承担指引，不改写上一版发布正文。
+
 
 
 
