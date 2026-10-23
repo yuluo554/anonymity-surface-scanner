@@ -132,3 +132,60 @@
 | 3.9 / 3.10 / 3.11 行为 | 不作承诺；CI 矩阵只覆盖下界（3.8）与当代（3.12） | 不适用 |
 
 **覆盖对账结论**：六条出口门全部有归宿；tag 前两条已实现、其余在 tag 后逐条补实测。
+
+---
+
+## 三、v0.1.1（M6.1 二次迭代，2026-10-23）
+
+> 触发：`v0.1.0` 的 Release 附件（sdist）**跑不了它自带的测试** —— 解包后
+> `py -3.12 -m pytest` → **102 failed / 171 passed / exit 1**。
+> 本节只记 v0.1.1 的修复与实测；`v0.1.0` 的 tag 与 Release **原样保留**（不移动、不删附件）。
+
+### 1. 修了什么（逐条）
+
+| 编号 | 缺陷 | 修法 | 证据 |
+| --- | --- | --- | --- |
+| **D1** | sdist 缺 `tests/conftest.py`、`data/fixtures/**`、`examples/adult/*` → 自带 pytest 102 failed | `MANIFEST.in` **追加**三行：`recursive-include tests *.py` / `recursive-include data/fixtures *.json *.md` / `recursive-include examples *.py *.json *.md *.sh` | sdist 解包树 → `pytest` **exit 0**；`gen_fixtures.py --check` → 逐字节一致 |
+| **D1 反向红线** | 写成 `recursive-include examples *` 会把 3.4 MB `adult.csv` 打进包 | 只列后缀；新增 `tests/test_packaging.py`（4 项）断言三条规则存在且**任何 `recursive-include` 都不得用裸 `*`**（负控：改成裸 `*` 即 3 项红） | 包内 `*.csv`/`*.data`/`*.names` = 0（`tar tzf | grep` 无命中） |
+| **D2** | tag 树的 README 自述「M0–M5 完成、M6 未发布」 | 文档已在 `v0.1.0` 之后回填；**本次只把新 tag 打在 HEAD** | 布局门 `LAYOUT.RELEASE` = PASS（两栏 / 覆盖对账 / 三态行 10） |
+| **D3** | 预算截断时 `empty_set_witness=true` 印出可证伪结论 | `m3_search` 增加证据前提：**每个单列扩展都实算过**才允许 `true`；`m5_gate` 对「空集在列但证据不足」改印「预算不足，无法判定」 | `budget=1` 实测 `witness=False / sets=[[]] / completeness=budget-truncated`；穷尽路径 `witness=False / sets=[["education","sex"]]` 不变 |
+| **D8** | 「安装后零网络」AST 守门只覆盖 2 个文件 | 扩到产品包 9 个模块 + 「清单 ↔ 盘上文件」互校 | 负控：往 `m4_risk.py` 插 `import urllib.request` → 该项立刻红 |
+| **D6** | 自述测试数 277 硬编码 4 处、无守门 | 新增 `tests/test_doc_counts.py`：四处副本须一致，且等于 `pytest --collect-only` 实收集数 | 改文档数字 → 门红（实测：库里写 277、实际收集 295 时报「295」） |
+| **DEC2** | floor `>=3.8`（已 EOL）与 SPDX license 互斥 | `requires-python = ">=3.12"`、`build-system.requires = ["setuptools>=77"]`、`license = "MIT"` + `license-files = ["LICENSE"]`、删 `License::` classifier | `PKG-INFO`：`License-Expression: MIT` + `Requires-Python: >=3.12`；构建输出**无** License deprecation warning |
+| **D5/上游** | CI 用 `checkout@v4` / `setup-python@v5`（Node20 弃用注解） | 升 `checkout@v7` / `setup-python@v7`；加 `permissions: contents: read` 与 `concurrency`；矩阵 `{ubuntu-22.04, windows-latest} × 3.12` | 见 §三.4（待 CI 实跑确认） |
+| **新增 CI job** | 发布物"坏"这件事本地没门能抓 | `packaging` job：build sdist → 无表格扫描 → 解包跑自带 pytest → 真值自检 → 布局门 | 见 §三.4 |
+
+### 2. sdist 自足性口径（本节是这条口径的**单点定义**）
+
+> **sdist 解包树的正确基线是「干净树基线」，不是开发树基线。**
+> 因为 `.gitignore` 排除全部表格（`.csv` / `.tsv` / UCI 的 `.data` / `.names`），
+> 依赖表格的夹具用例在 sdist 里必然 skip —— 写成一个"等于开发树全量数"的承诺，
+> 会让人以为没修好。
+
+| 树 | 收集数 | `py -3.12 -m pytest` 实测 |
+| --- | --- | --- |
+| 开发树（本机，有表格）—— 当前全量测试 295 项 | **295** | **295 passed**，exit 0 |
+| sdist 解包树（无表格，只用装了 `pytest` 的 venv，**不装包**） | **295** | **222 passed + 73 skipped**，exit 0 |
+| `git archive HEAD` 干净树（无表格） | **295** | 同 sdist 口径（222 passed + 73 skipped） |
+
+两处 skip 的构成：4 组夹具的表格用例（需要 `table.csv`）+ 依赖真值但表格缺失的 CLI 对照用例；
+`test_doc_counts.py::test_declared_test_count_equals_collected_count` 在缺表格时**如实 skip**，
+不用一个能过但什么都没证明的断言充数。
+
+### 3. 交付面与版本
+
+| 项 | v0.1.1 实测 |
+| --- | --- |
+| 版本单一来源 | `anonymity_scanner.__version__ = "0.1.1"`；`pyproject` 仍走 `dynamic = ["version"]` |
+| `anonymity-scanner --version` | `anonymity-scanner 0.1.1` |
+| 表格入库 | `git ls-files` 中 `*.csv` / `*.data` / `*.names` = **0** |
+| Adult 端到端 | `bash examples/adult/run.sh` → exit **1**；`k=1`、`1703` 类、`762` 条违例；搜索 `exhausted`、最小崩塌集 `[["education","sex"]]`、`empty_set_witness=false`（**与 v0.1.0 逐项相同**） |
+| 门 | 布局门全绿（`LAYOUT.RELEASE` PASS 两栏:True 覆盖对账:True 三态行:10）；变异验证 10/10；`scaffold_selftest` 9 项全 PASS（`VERSION.FORMAT = 0.1.1`）；`gen_fixtures --check` 逐字节一致 |
+
+### 4. 待复验项（执行方不自宣通过）
+
+- v0.1.1 的 tag / Release / 附件 digest 三方对撞。
+- 新 CI 配置（v7 actions + 3.12 单腿矩阵 + `packaging` job）的实跑结果。
+- `plan/00` 与 `plan/05` 已把「v0.1.1 待发布」写进状态；Release 上线后需再回填一次 to `已发布`。
+
+

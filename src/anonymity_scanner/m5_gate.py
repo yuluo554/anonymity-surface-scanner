@@ -419,6 +419,14 @@ def _render_search(document):
                     "空集 `[]` 在列**是**边界集：语义 = **一个 QI 列都不能加**"
                     "（不是\"什么都不用声明\"）。"
                 )
+            elif not exhaustive and [] in search["minimal_collapse_sets"]:
+                lines.append("")
+                lines.append(
+                    "空集 `[]` 在列：**预算不足，无法判定**它是否为边界集"
+                    "（完整性 = `%s`，没有把单列扩展算完；"
+                    "`empty_set_witness` 因此为 `false`，不得读作"
+                    "\"存在安全的单列扩展\"）。" % search["completeness"]
+                )
     lines.append("")
     if search["strata"]:
         lines.extend([

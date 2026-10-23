@@ -12,6 +12,13 @@ env:
   PYTHONUTF8: "1"
   PYTHONDONTWRITEBYTECODE: "1"
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: py${{ matrix.python-version }} · ${{ matrix.os }}
@@ -19,12 +26,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # 3.8 已 EOL（2024-10），且 SPDX license 需要 setuptools>=77（它要求 py>=3.9）；
+        # 下界因此抬到 3.12，只保留两平台各一条腿。
         os: [ubuntu-22.04, windows-latest]
-        python-version: ["3.8", "3.12"]
+        python-version: ["3.12"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -45,3 +54,44 @@ jobs:
 
       - name: CLI smoke (console entry point)
         run: anonymity-scanner --version
+
+  packaging:
+    name: sdist self-contained · py3.12
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install build + pytest only (simulate a user)
+        run: python -m pip install build pytest
+
+      - name: Build sdist
+        run: python -m build --sdist --outdir dist
+
+      - name: No tables in the sdist
+        run: |
+          if tar tzf dist/*.tar.gz | grep -E '\.csv|\.data$|\.names'; then
+            echo "FAIL: sdist 里有表格（隐私红线）"
+            exit 1
+          fi
+          echo "PASS: 无 csv/data/names"
+
+      - name: Run the sdist's own tests without installing the package
+        run: |
+          mkdir -p /tmp/x
+          tar xzf dist/*.tar.gz -C /tmp/x
+          cd /tmp/x/anonymity_scanner-*
+          python -m pytest
+
+      - name: Fixture self-check inside the sdist
+        run: |
+          cd /tmp/x/anonymity_scanner-*
+          python tools/gen_fixtures.py --check
+
+      - name: Layout gate inside the sdist
+        run: |
+          cd /tmp/x/anonymity_scanner-*
+          python tools/check_sprint_layout.py

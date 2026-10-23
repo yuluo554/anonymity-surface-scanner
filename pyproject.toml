@@ -1,18 +1,19 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "anonymity-scanner"
 description = "Find which column combinations collapse k-anonymity: minimal collapse sets, equivalence classes, recomputable gate."
 readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{name = "yuluo554"}]
 keywords = ["k-anonymity", "quasi-identifier", "statistical disclosure control", "privacy", "cli"]
 classifiers = [
   "Programming Language :: Python :: 3",
-  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.12",
   "Environment :: Console",
   "Topic :: Security",
 ]

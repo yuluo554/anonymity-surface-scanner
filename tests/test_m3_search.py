@@ -207,6 +207,41 @@ def test_budget_truncation_never_pretends_exhaustive():
     assert full["subset_space"] == truth["search"]["subset_space"]
 
 
+# ── 判据 3b：`empty_set_witness` 必须有证据（D3 负控） ───────────────────
+
+def test_budget_truncated_empty_set_witness_is_false(tmp_path):
+    """预算只够算空集时，`empty_set_witness` 必须是 `false`（「没算过」≠「不存在」）。
+
+    修复前：`budget=1` 会把 `[[]]` 留在 `minimal_collapse_sets` 里 → `empty_set_witness`
+    恒 `true`，而 `gate.md` 会印出可证伪的「一个 QI 列都不能加」。
+    """
+    table_path = tmp_path / "t.csv"
+    # 4 行、两列：单独任何一列都不安全（k=2 < 3），所以穷尽时空集确实是边界集。
+    table_path.write_bytes(b"age,zip\n30,100\n30,101\n31,100\n31,101\n")
+    table = read_table(table_path)
+    pool = ["age", "zip"]
+
+    truncated = search(table, pool, [], "drop", 3, budget=1)
+    assert truncated["completeness"] == "budget-truncated"
+    assert truncated["evaluated_subsets"] == 1, "预算只够算空集"
+    assert truncated["empty_set_witness"] is False, "没算过任何单列扩展，不得断言边界"
+    assert truncated["minimal_collapse_sets"] == [[]], "边界集列表本身不变（只是证据不足）"
+
+    exhausted = search(table, pool, [], "drop", 3, budget=None)
+    assert exhausted["completeness"] == "exhausted"
+    assert exhausted["empty_set_witness"] is True, "穷尽且所有单列都不安全 → 证据成立"
+
+
+def test_some_single_columns_evaluated_but_not_all_keeps_witness_false(tmp_path):
+    """预算够算一部分单列扩展时，同样不得断言空集是边界集。"""
+    table_path = tmp_path / "t.csv"
+    table_path.write_bytes(b"age,zip,sex\n30,100,m\n30,101,m\n31,100,f\n31,101,f\n")
+    result = search(read_table(table_path), ["age", "zip", "sex"], [], "drop", 3, budget=2)
+    assert result["completeness"] == "budget-truncated"
+    assert result["evaluated_subsets"] == 2, "空集 + 一个单列"
+    assert result["empty_set_witness"] is False
+
+
 def test_require_exhaustive_on_truncated_budget_is_undecidable(tmp_path, capsys):
     truth = load_truth("budget")
     table_path = FIXTURES / "budget" / "table.csv"

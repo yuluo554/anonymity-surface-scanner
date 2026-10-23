@@ -17,6 +17,10 @@
   * 空集不安全（参与分组的行数 < 阈值）或候选池为空 → `verdict = "no_solution"`；
   * 没有任何单列安全 → 空集是边界集 → `minimal_collapse_sets: [[]]` + `empty_set_witness: true`，
     语义 = **一个 QI 列都不能加**（不是"什么都不用声明"）。
+  * **证据前提**（M6.1 修正）：`empty_set_witness` 额外要求"每个单列扩展都实算过"。
+    预算截断导致单列扩展没算过时，`minimal_collapse_sets` 里仍可能留着空集，
+    但 `empty_set_witness` 一律 `false` —— 「没算过」不等于「不存在安全扩展」，
+    此时机器读者应看 `completeness`（`budget-truncated`）而不是把这个字段当结论。
 """
 from __future__ import annotations
 
@@ -225,13 +229,22 @@ def search(table, pool, sensitive, policy, threshold, budget=None, require_exhau
         declared_classes, _undecided, _values = group_rows(table, list(declared), policy)
         declared_k = k_of(declared_classes)
 
+    # 「空集是边界集」的证据口径（§4.5 定义句）：只有**每一个单列扩展都实算过且都不安全**
+    # 时，才敢断言"一个 QI 列都不能加"。预算截断时可能一个扩展都没算过 ——
+    # 「没算过」不得当成「不存在安全扩展」。此前 `budget=1` 会印出可证伪的 `true`
+    # （空集留在 `minimal_collapse_sets` 里，但 `evaluated_subsets` 只有 1）。
+    # 注意：`monotonicity-not-applicable`（预算充足、未剪枝全枚举）不算截断，证据是足的。
+    empty_set_evidenced = bool(candidates) and all(
+        tuple([column]) in cache for column in candidates
+    )
+
     return {
         "verdict": verdict,
         "completeness": state,
         "collapse_sets_status": collapse_sets_status(state),
         "non_exhaustive": state != "exhausted",
         "minimal_collapse_sets": minimal_collapse_sets,
-        "empty_set_witness": [] in minimal_collapse_sets,
+        "empty_set_witness": ([] in minimal_collapse_sets) and empty_set_evidenced,
         "empty_set_k": base,
         "declared_k": declared_k,
         "candidate_count": len(candidates),

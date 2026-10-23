@@ -5,4 +5,4 @@
 
 版本号是本项目的**唯一可编辑副本**（`pyproject.toml` 用 `dynamic = ["version"]` 从本轮读取）。
 """
-__version__ = "0.1.0"
+__version__ = "0.1.1"

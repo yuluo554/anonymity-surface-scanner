@@ -4,8 +4,8 @@
 
 - **项目**：匿名性攻击面搜索器（Anonymity Surface Scanner）——纯本地 Python CLI
 - **性质**：不参赛项目题 · 发布 GitHub **公开仓库** · 署名 `yuluo554`
-- **版本**：v1（2026-10-20 定稿；需求侧、竞品与开源检索基准日 **2026-10-20**）；当前提交 = M6 收尾（v0.1.0 已发布）
-- **当前状态**：**M6 完成 · v0.1.0 已发布**（公开仓 + annotated tag + GitHub Release 附 sdist；CI ubuntu/windows × 3.8/3.12 首推全绿）。`gate` 读闭合判据文件 → 调 M2（可选 M3）→ 产出 `gate.json` + `gate.md` + 真实退出码；`pass` / `violation` / `undecidable` 三态各有用例；Adult 端到端已实跑回填。M0–M1 已交付骨架与独立真值夹具，M2 已交付等价类引擎，M3 已交付组合搜索，M4 已交付逐记录风险；仅计算实现 M1（`schema`）仍未落地，该子命令一律 `MODULE_NOT_READY` + 退出码 `2`（fail-closed，不伪造结果）。
+- **版本**：v1（2026-10-20 定稿；需求侧、竞品与开源检索基准日 **2026-10-20**）；当前提交 = M6.1 二次迭代（**v0.1.1 待发布**）；下界抬到 **Python 3.12**
+- **当前状态**：**M6 完成 · v0.1.0 已发布；M6.1 修复已入库 · v0.1.1 待发布**（公开仓 + annotated tag + GitHub Release 附 sdist；CI 重推验证待跑）。`gate` 读闭合判据文件 → 调 M2（可选 M3）→ 产出 `gate.json` + `gate.md` + 真实退出码；`pass` / `violation` / `undecidable` 三态各有用例；Adult 端到端已实跑回填。M0–M1 已交付骨架与独立真值夹具，M2 已交付等价类引擎，M3 已交付组合搜索，M4 已交付逐记录风险；仅计算实现 M1（`schema`）仍未落地，该子命令一律 `MODULE_NOT_READY` + 退出码 `2`（fail-closed，不伪造结果）。
 - **一句话定位**：k/l/t 公式是商品，**没人回答"哪几列组合会让 k 崩塌"**——本工具输入一张表 + 列角色声明，输出最小 k、**最小崩塌集**、每处违例的等价类与行号清单（可手算复核）、以及可挂 CI 的 gate 结论。搜索层是护城河，不是公式层。
 - **交付形态**：**纯本地 Python CLI**（唯一形态，不设备选）。无 GPU、无云、无网络调用、无需真实敏感数据。
 - **撞域切割**：同系列既有题材分别在**制度与流程层**（产检查清单、评制度）与**文本条款层**（读文档、标风险条款）作业；本题是**数据层的可计算量**——输入数据行，产出数值、行号与列组合（方向级描述，具体领域按品牌隔离纪律不展开）。
@@ -38,11 +38,11 @@
 | `plan/HANDOFF-M6.md` | 第 6 棒启动包（七节；M5 收尾时写） | ✅ M5 |
 | `AGENTS.md` | 仓库锚点：方法论装订、布局门命令、强制布局清单、变异验证 | ✅ M0 |
 | `pyproject.toml` / `src/anonymity_scanner/` | 打包与骨架（CLI 契约 / 确定性序列化 / 退出码映射） | 🟡 M0 |
-| `tests/` | 契约 / 确定性 / 输入校验 / 夹具验收 / M2 等价类 / M3 组合搜索 / M4 逐记录风险 / M5 gate 测试（277 项，双解释器全绿；干净 clone（无 `*.csv`）→ 205 passed + 72 skipped） | ✅ M5 |
+| `tests/` | 契约 / 确定性 / 输入校验 / 夹具验收 / M2 等价类 / M3 组合搜索 / M4 逐记录风险 / M5 gate 测试 / 打包与计数守门（**当前全量测试 295 项**；干净 clone（无 `*.csv`）→ 222 passed + 73 skipped，见 `plan/RELEASE-M6.md` §三.2） | ✅ M5 |
 | `tools/check_sprint_layout.py` | 布局门（8 条判据） | ✅ M0 |
 | `tools/verify_layout_gate.py` | 布局门变异验证（10 组，逐组必须变红） | ✅ M0 |
 | `tools/scaffold_selftest.py` | 口径单点自检（版本 / 依赖 / 退出码 / 序列化） | ✅ M0 |
-| `.github/workflows/ci.yml` | CI：ubuntu/windows × 3.8/3.12 | ✅ M6（首推 4 矩阵全绿） |
+| `.github/workflows/ci.yml` | CI：ubuntu-22.04 / windows-latest × 3.12（test）+ ubuntu-22.04 × 3.12（packaging：sdist 自足四门） | ✅ M6（v0.1.1 重推待验证） |
 | `.gitattributes` | 源码 eol=lf 归一 + 二进制/快照冻结（sha256 被登记的对象字节不许被 git 改写） | ✅ M0 |
 
 > **交接单规则**：`plan/HANDOFF-M<k>.md` = **第 k 棒的启动包**，由第 k−1 棒收尾时写（七节：当前进度 / 当前事实·状态不变量 / 待办 / 既定口径 K 编号 / 环境坑 / DoD 逐项 / 命令速查）。

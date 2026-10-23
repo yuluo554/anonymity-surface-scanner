@@ -37,7 +37,8 @@
 | **M5** | gate + 判据文件：JSON + 人读报告 + 退出码 | ✅ 2026-10-20 |
 | **M6** | 发布：tag + Release + 留档 | ✅ 2026-10-20 |
 
-> **当前进度：M0–M6 完成，v0.1.0 已发布**（[Release](https://github.com/yuluo554/anonymity-surface-scanner/releases/tag/v0.1.0)）。
+> **当前进度：M0–M6 完成，v0.1.0 已发布；v0.1.1（sdist 自足修复）已入库待发布**
+> （[Releases](https://github.com/yuluo554/anonymity-surface-scanner/releases)）。
 >
 > `gate` 一条命令跑通：读**闭合**判据文件 → 调 M2（可选 M3）→
 > 产出 `<out-dir>/gate.json` + `<out-dir>/gate.md` + 真实退出码。
@@ -47,6 +48,8 @@
 > 崩塌边界集（含 `[[]]`「一列都不能加」与 `no_solution`「无解」）、剪枝 / 预算计数、完整性三态
 > （`exhausted` / `budget-truncated` / `monotonicity-not-applicable`）、逐记录攻击者判定。
 > 空表 / 无参与行 / 预算截断 + `require_exhaustive` 一律 `2`。
+> **`empty_set_witness` 只在「每个单列扩展都实算过」时为 `true`**：预算截断导致单列没算完时它一律
+> `false`（报告印「预算不足，无法判定」），避免把"没算过"当成"不存在安全扩展"。
 > 仅计算实现 `schema`（M1）尚未落地——调用会明确返回 `MODULE_NOT_READY` 与退出码 `2`（fail-closed），
 > **不会**用空结果冒充通过。
 
@@ -59,7 +62,7 @@ python -m pip install -e ".[dev]"
 anonymity-scanner --version
 ```
 
-Python ≥ 3.8。运行时零第三方依赖；`[dev]` 只装 `pytest`。
+Python ≥ 3.12（3.8 已 EOL；3.9–3.11 不作承诺）。运行时零第三方依赖；`[dev]` 只装 `pytest`。
 
 ## 命令一览
 

@@ -15,8 +15,12 @@
 | M4：逐记录风险（三口径 + `risk.json`） | ✅ | `pytest tests/test_m4_risk.py` |
 | **M5：可复算 gate（判据闭合 + `gate.json` + `gate.md` + 退出码）** | ✅ | `pytest tests/test_m5_gate.py tests/test_contract.py`；Adult 实跑见 `examples/adult/EXPECTED.md` |
 | 计算实现模块 M1（`schema` 子命令） | ⬜ | `anonymity-scanner schema ...` → `MODULE_NOT_READY` + 退出码 `2`（**设计如此**，不在 M6 范围） |
-| 全量测试 | ✅ | `py -3.12 -m pytest` → **277 passed**；`py -3.8 -m pytest` → **277 passed**；干净树（无 `*.csv`）→ **205 passed + 72 skipped** |
+| 全量测试 | ✅ | `py -3.12 -m pytest` → **277 passed**（M5 当轮）；**当前全量测试 295 项**；干净树（无 `*.csv`）→ **222 passed + 73 skipped**（口径见 `plan/RELEASE-M6.md` §三.2） |
 | 布局门 | ✅ | 全绿（`LAYOUT.RELEASE` 为 `SKIP`：M6 未完成，发布留档尚不适用） |
+
+> **M6.1（v0.1.1，2026-10-23）增量**：sdist 自足修复（D1）、`empty_set_witness` 证据前提（D3）、
+> 零网络 AST 守门扩到产品包 9 模块（D8）、自述计数守门（D6）、floor `>=3.12` + SPDX license（DEC2）、
+> CI 升 v7 actions + 3.12 单腿矩阵 + `packaging` job。逐条见 `plan/RELEASE-M6.md` §三。
 
 **M5 实测命令与输出摘要**（2026-10-20，本机）：
 

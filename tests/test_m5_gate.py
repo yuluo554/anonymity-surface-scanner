@@ -483,6 +483,44 @@ def test_criteria_parsing_lives_only_in_m5_gate():
     assert gate_text.count("json.loads") == 1
 
 
+# ── 「安装后零网络」的守门范围（D8） ──────────────────────────────────────
+
+# `data/README.md` §二 承诺：装完不联网。此前只有 `m5_gate.py` 与示例 `prepare.py`
+# 被扫，其余计算模块加一行 `import urllib` 不会红。这里把整个产品包纳入扫描面
+# （`cli.py` 也算：它是用户实际入口）。
+NETWORK_MODULES = frozenset({
+    "urllib", "urllib2", "urllib3", "http", "httplib", "httpx",
+    "requests", "socket", "socketserver", "ftplib", "smtplib", "telnetlib",
+    "ssl", "xmlrpc", "aiohttp", "websocket", "websockets",
+})
+
+# 必扫清单：改名 / 删文件时 `test_network_scanned_list_matches_disk` 变红，
+# 避免「扫了个空集也算通过」。
+NETWORK_SCANNED = (
+    "cli.py", "m2_classes.py", "m3_search.py", "m4_risk.py", "m5_gate.py",
+    "tableio.py", "canonical.py", "declaration.py", "report.py",
+)
+
+
+def test_network_scanned_list_matches_disk():
+    """负控：清单里的文件必须在盘上，且每个产品 `.py` 都在清单里。"""
+    on_disk = {path.name for path in SRC.glob("*.py")}
+    missing = set(NETWORK_SCANNED) - on_disk
+    assert not missing, "清单里有盘上不存在的文件：%s" % sorted(missing)
+    # `__init__.py`（只有版本号）与 `exit_codes.py`（纯常量与异常）不在扫描面：
+    # 前者被 m5_gate import 时会带上 `m2_classes`/`m3_search`，后者无任何 import。
+    unscanned = on_disk - set(NETWORK_SCANNED) - {"__init__.py", "exit_codes.py"}
+    assert not unscanned, "产品包里有模块未被零网络守门覆盖：%s" % sorted(unscanned)
+
+
+@pytest.mark.parametrize("name", NETWORK_SCANNED)
+def test_product_modules_import_no_network_stack(name):
+    """K8 + `data/README.md` §二：产品模块一律不得 import 网络栈。"""
+    modules = _imported_modules(SRC / name)
+    offending = modules & NETWORK_MODULES
+    assert not offending, "%s 出现了网络模块：%s" % (name, sorted(offending))
+
+
 # ── Adult 演示：判据闭合、脚本离线（不需要数据也能跑） ────────────────────
 
 def test_adult_example_is_closed_and_offline():
