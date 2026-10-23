@@ -198,21 +198,33 @@
 | 回下载件自证 | 解包 → **只装 `pytest`** 的新 venv（不装包）→ `pytest` 必须 exit `0` |
 | 包内表格 | `tar tzf | grep -E '\.csv|\.data$|\.names'` 必须无命中 |
 
-**本轮实测结果（2026-10-23，执行时点）**：三方 digest 逐字符相同；`sha256sum -c SHA256SUMS` = OK；
-回下载件跑它自带测试 = **222 passed, 73 skipped / exit 0**；包内表格 0；包条目 83。
-字面值见该 tag 的 Release 正文与 tag 消息。
+**本轮实测结果（2026-10-23，执行时点）**：三方 digest **逐字符相同**且与重建件**逐字节 `cmp` 一致**；
+`sha256sum -c SHA256SUMS` = OK；回下载件跑它自带测试 = **222 passed, 73 skipped / exit 0**；
+包内表格 0；包条目 83。字面值见该 tag 的 Release 正文与 tag 消息。
 
-### 5. CI 实测
+**最终发布形态（tag 重指后）**：
 
-| run | 事件 | 结论 |
-| --- | --- | --- |
-| `39897683566` | push → `main` | success（3 job） |
-| `39898099955` | push → `main`（tag 后回填） | success（3 job） |
-| tag `v0.1.1` 的 push run | push → tag | success（3 job）；run id 见 `gh run list --branch v0.1.1` |
+| 项 | 值 |
+| --- | --- |
+| tag | `v0.1.1` → `65b3d86`（annotated 对象 `c983ef2`） |
+| 附件 | `anonymity_scanner-0.1.1.tar.gz`（`238289` B）+ `SHA256SUMS`（`97` B） |
+| 重建件 / 回下载件 / GitHub 侧 digest | 三者逐字符相同，`cmp` 逐字节相同 |
 
-check-run 注解数：**0**。三个 job = `py3.12 · ubuntu-22.04` / `py3.12 · windows-latest` /
+### 5. CI 实测（本版共 4 轮，各 3 job 全绿）
+
+| run | 事件 | head | 结论 |
+| --- | --- | --- | --- |
+| `39897683566` | push → `main` | `4e1764c` | success（3 job） |
+| `39897787880` | push → tag `v0.1.1`（首次指向） | `4e1764c` | success（3 job） |
+| `39898099955` | push → `main`（tag 后回填） | `caca6a4` | success（3 job） |
+| `39899133299` | push → tag `v0.1.1`（重指后） | `65b3d86` | success（3 job） |
+| `39899154497` | push → `main`（RELEASE 去循环） | `65b3d86` | success（3 job） |
+
+check-run 注解数：**0**（逐条 `gh api …/check-runs/<id>/annotations` 汇总；6 条 check-run 全 0）。
+三个 job = `py3.12 · ubuntu-22.04` / `py3.12 · windows-latest` /
 `sdist self-contained · py3.12`。`packaging` job 的六步（build sdist → 无表格扫描 →
 解包跑自带 pytest → 真值自检 → 布局门）全部 `✓`。
+
 
 ### 6. 已知边界（v0.1.1 结束时点）
 
