@@ -5,3 +5,12 @@ include pyproject.toml
 include data/README.md
 include plan/*.md
 recursive-include tools *.py
+
+# ── sdist 自足性（用户下载源码包后能直接跑它自带的测试与真值自检）──
+# 只收 conftest.py 等测试源码，不收表格；data/fixtures 只收真值（*.json/*.md），
+# 表格本体（table.csv）永不入包 —— 隐私红线。
+# 显式列后缀，禁止写成 `recursive-include examples *`，
+# 否则会把本机 examples/adult/adult.csv（3.4 MB UCI Adult）打进 sdist。
+recursive-include tests *.py
+recursive-include data/fixtures *.json *.md
+recursive-include examples *.py *.json *.md *.sh

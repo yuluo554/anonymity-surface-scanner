@@ -105,3 +105,6 @@ logs/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# ---- 二次迭代交接物（含本机绝对路径，不入仓）----
+update/
