@@ -4,8 +4,8 @@
 
 - **项目**：匿名性攻击面搜索器（Anonymity Surface Scanner）——纯本地 Python CLI
 - **性质**：不参赛项目题 · 发布 GitHub **公开仓库** · 署名 `yuluo554`
-- **版本**：v1（2026-10-20 定稿；需求侧、竞品与开源检索基准日 **2026-10-20**）；当前提交 = M6.1 二次迭代（**v0.1.1 待发布**）；下界抬到 **Python 3.12**
-- **当前状态**：**M6 完成 · v0.1.0 已发布；M6.1 修复已入库 · v0.1.1 待发布**（公开仓 + annotated tag + GitHub Release 附 sdist；CI 重推验证待跑）。`gate` 读闭合判据文件 → 调 M2（可选 M3）→ 产出 `gate.json` + `gate.md` + 真实退出码；`pass` / `violation` / `undecidable` 三态各有用例；Adult 端到端已实跑回填。M0–M1 已交付骨架与独立真值夹具，M2 已交付等价类引擎，M3 已交付组合搜索，M4 已交付逐记录风险；仅计算实现 M1（`schema`）仍未落地，该子命令一律 `MODULE_NOT_READY` + 退出码 `2`（fail-closed，不伪造结果）。
+- **版本**：v1（2026-10-20 定稿；需求侧、竞品与开源检索基准日 **2026-10-20**）；当前提交 = M6.1 二次迭代（**v0.1.1 已发布**）；下界抬到 **Python 3.12**
+- **当前状态**：**M6 完成（v0.1.0）· M6.1 完成（v0.1.1 已发布）**；公开仓 + annotated tag + GitHub Release 附 sdist + `SHA256SUMS`，CI 两轮（`main` push 与 tag push）各 3 job 全绿。`gate` 读闭合判据文件 → 调 M2（可选 M3）→ 产出 `gate.json` + `gate.md` + 真实退出码；`pass` / `violation` / `undecidable` 三态各有用例；Adult 端到端已实跑回填。M0–M1 已交付骨架与独立真值夹具，M2 已交付等价类引擎，M3 已交付组合搜索，M4 已交付逐记录风险；仅计算实现 M1（`schema`）仍未落地，该子命令一律 `MODULE_NOT_READY` + 退出码 `2`（fail-closed，不伪造结果）。
 - **一句话定位**：k/l/t 公式是商品，**没人回答"哪几列组合会让 k 崩塌"**——本工具输入一张表 + 列角色声明，输出最小 k、**最小崩塌集**、每处违例的等价类与行号清单（可手算复核）、以及可挂 CI 的 gate 结论。搜索层是护城河，不是公式层。
 - **交付形态**：**纯本地 Python CLI**（唯一形态，不设备选）。无 GPU、无云、无网络调用、无需真实敏感数据。
 - **撞域切割**：同系列既有题材分别在**制度与流程层**（产检查清单、评制度）与**文本条款层**（读文档、标风险条款）作业；本题是**数据层的可计算量**——输入数据行，产出数值、行号与列组合（方向级描述，具体领域按品牌隔离纪律不展开）。
@@ -100,7 +100,7 @@
 | P7 | "CLI + 门禁"形态有人认，但"猜列名"不成立 | piiscope 2★、2026-10-11、`_QI_NAME_HINTS` 硬编码、PyPI 月下载 58 | ✅ 实测 |
 | P8 | 本工具能跑出可手算复核的违例清单 | M2：`scan.json` 的违例三件套在 tiny 上逐条可手算（`tests/test_m2_classes.py`）；人读报告在 `gate.md`（`tests/test_m5_gate.py`） | ✅ M2（JSON）/ ✅ M5（人读） |
 | P9 | 最小崩塌集在植入真值夹具上逐项命中 | M3：四组夹具的 `search` / `minimal_collapse_sets` 与独立 oracle 真值逐项一致（`tests/test_m3_search.py`）；三种场景（默认 / 空集 / 无解）逐组断言 | ✅ M3 |
-| P10 | 发布形态（公开仓 + tag + Release + 留档） | 公开仓 `yuluo554/anonymity-surface-scanner`；`v0.1.0`（指向 `eeda0cd`）+ Release 附 sdist（sha256 `e5f3dbc0…47b`）；回下载 `sha256sum -c` OK；CI 4 矩阵首推全绿 | ✅ M6 |
+| P10 | 发布形态（公开仓 + tag + Release + 留档） | 公开仓 `yuluo554/anonymity-surface-scanner`；`v0.1.0`（指向 `eeda0cd`）与 `v0.1.1`（sdist 自足修复）各附 sdist + `SHA256SUMS`；回下载 `sha256sum -c` OK；两轮 CI（`main` push / tag push）各 3 job 全绿 | ✅ M6 + M6.1 |
 | P11 | Reddit 侧需求原话 | 直连超时、pullpush 限流 | ❌ 未取得（不作论据） |
 
 ## 四、里程碑

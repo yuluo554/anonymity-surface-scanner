@@ -182,10 +182,43 @@
 | Adult 端到端 | `bash examples/adult/run.sh` → exit **1**；`k=1`、`1703` 类、`762` 条违例；搜索 `exhausted`、最小崩塌集 `[["education","sex"]]`、`empty_set_witness=false`（**与 v0.1.0 逐项相同**） |
 | 门 | 布局门全绿（`LAYOUT.RELEASE` PASS 两栏:True 覆盖对账:True 三态行:10）；变异验证 10/10；`scaffold_selftest` 9 项全 PASS（`VERSION.FORMAT = 0.1.1`）；`gen_fixtures --check` 逐字节一致 |
 
-### 4. 待复验项（执行方不自宣通过）
+### 4. tag、Release 与三方 digest
 
-- v0.1.1 的 tag / Release / 附件 digest 三方对撞。
-- 新 CI 配置（v7 actions + 3.12 单腿矩阵 + `packaging` job）的实跑结果。
-- `plan/00` 与 `plan/05` 已把「v0.1.1 待发布」写进状态；Release 上线后需再回填一次 to `已发布`。
+| 项 | v0.1.1 实测 |
+| --- | --- |
+| tag | `v0.1.1`（annotated），指向 `4e1764c`（`M6.1：v0.1.1 —— …`） |
+| Release | <https://github.com/yuluo554/anonymity-surface-scanner/releases/tag/v0.1.1>（非 draft、非 prerelease、`latest`） |
+| 附件 ① | `anonymity_scanner-0.1.1.tar.gz`（`236922` B）sha256 `9d16eb094a25a1afa6a463e3c038430d951bbab34f8350a32a2148151f240e5e` |
+| 附件 ② | `SHA256SUMS`（`97` B）sha256 `2fea46b4563868ebac1b997d5aec19eadd6d8433066fd903ad6f1fc0637d6fbc` |
+| ① 重建件（`git archive v0.1.1` → `python -m build --sdist`） | `9d16eb09…40e5e` |
+| ② 回下载件（`gh release download v0.1.1`） | `9d16eb09…40e5e`（与 ① 逐字符相同） |
+| ③ GitHub 侧 digest | `sha256:9d16eb09…40e5e`（与 ①② 逐字符相同） |
+| `sha256sum -c SHA256SUMS`（回下载件） | **OK** |
+| 回下载件跑它自带的测试（只装 `pytest` 的新 venv，不装包） | **222 passed, 73 skipped**，exit `0` |
+| 包内表格 | `tar tzf | grep -E '\.csv|\.data$|\.names'` → 无命中（rc=1） |
+| 包条目数 | 83 |
+
+> **注**：`SHA256SUMS` 用**两个空格 + 单 LF**（无 `*`）。写成 `sha256sum` 默认的 `*` 形式会与
+> `sha256sum -c` 在 Windows 的 CRLF 下互相绊倒；已实测通过。
+
+### 5. CI 实测（本轮两轮，各 3 job 全绿）
+
+| run | 事件 | head | 结论 |
+| --- | --- | --- | --- |
+| `39897683566` | push → `main` | `4e1764c` | success（`py3.12 · ubuntu-22.04` / `py3.12 · windows-latest` / `sdist self-contained · py3.12`） |
+| `39897787880` | push → tag `v0.1.1` | `4e1764c` | success（同上 3 job） |
+
+check-run 注解数：**0**。`packaging` job 的六步（build sdist → 无表格扫描 → 解包跑自带 pytest →
+真值自检 → 布局门）全部 `✓`。
+
+### 6. 仍未闭合（如实登记）
+
+- **tag 树里的 README 在 `v0.1.1` 上仍写「待发布」**：`4e1764c` 是发布提交，写「v0.1.1 待发布」是对的；
+  「已发布」是 tag 之后才成立的事实 → 按本仓两栏纪律，它只能写在 **tag 后**（本节）。
+  README 与 `plan/00` 已在 tag 之后改成「已发布」，属 `POST_TAG_SCOPE`（纯文档）。**不重指 tag。**
+- `plan/05` §「发布路径」里仍写 `v0.1.0` 的具体命令；它记录的是 M6 当轮路径，不逐个版本复制。
+- `v0.1.0` 的坏 sdist **保留在架**（DEC1-A）；其 Release 正文未加"已知问题"提示 —— 由本项目
+  的 README 与 v0.1.1 正文承担指引，不改写上一版发布正文。
+
 
 

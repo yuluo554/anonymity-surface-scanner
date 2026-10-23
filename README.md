@@ -37,8 +37,8 @@
 | **M5** | gate + 判据文件：JSON + 人读报告 + 退出码 | ✅ 2026-10-20 |
 | **M6** | 发布：tag + Release + 留档 | ✅ 2026-10-20 |
 
-> **当前进度：M0–M6 完成，v0.1.0 已发布；v0.1.1（sdist 自足修复）已入库待发布**
-> （[Releases](https://github.com/yuluo554/anonymity-surface-scanner/releases)）。
+> **当前进度：M0–M6 完成，v0.1.1 已发布**（[Releases](https://github.com/yuluo554/anonymity-surface-scanner/releases)）。
+> v0.1.1 修的是 `v0.1.0` 的源码包跑不了它自带测试这件事（详见 Release 正文与 `plan/RELEASE-M6.md` §三）。
 >
 > `gate` 一条命令跑通：读**闭合**判据文件 → 调 M2（可选 M3）→
 > 产出 `<out-dir>/gate.json` + `<out-dir>/gate.md` + 真实退出码。
